@@ -37,7 +37,7 @@ namespace Apps.Control
                     }
                 }
             }
-            
+
             return false;
         }
 
@@ -54,7 +54,7 @@ namespace Apps.Control
                     }
                     return true;
                 }
-            }      
+            }
             return false;
         }
     }
