@@ -6,8 +6,6 @@ namespace Apps.RealTime.Movement
 {
     public sealed class Mover : MonoBehaviour, IAction
     {
-        [SerializeField] ActionScheduler _actionScheduler;
-        [SerializeField] GameObject _target;
         [SerializeField] NavMeshAgent _navMeshAgent;
         [SerializeField] Animator _animator;
 

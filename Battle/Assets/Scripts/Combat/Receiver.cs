@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Apps.RealTime.Core;
+using UnityEngine;
+using UnityEngine.AI;
 
 namespace Apps.RealTime.Combat
 {
@@ -18,7 +20,9 @@ namespace Apps.RealTime.Combat
             {
                 // TODO cache reference
                 GetComponent<Animator>().SetTrigger(s_dieAnimation);
-                GetComponent<Collider>().enabled = false;
+                GetComponent<NavMeshAgent>().enabled = false;
+                GetComponent<ActionScheduler>().StartAction(null);
+                GetComponent<Fighter>().enabled = false;
             }
         }
     }

@@ -7,7 +7,8 @@ namespace Apps.RealTime.Combat
     public sealed class Fighter : MonoBehaviour, IAction
     {
         Animator _animator;
-        Mover _attacker;
+        Mover _mover;
+
         Receiver _receiver;
 
         float _durationCounter;
@@ -17,25 +18,31 @@ namespace Apps.RealTime.Combat
         private void Start()
         {
             _animator = GetComponent<Animator>();
+            _mover = GetComponent<Mover>();
         }
 
         public void Update()
         {
             _durationCounter += Time.deltaTime;
 
-            if (_receiver != null && !_receiver.IsDead && _attacker != null)
+            if (_receiver != null && !_receiver.IsDead)
             {
-                var distance = Vector3.Distance(transform.position, _receiver.transform.position);
-                if (distance > Configurations.AttackRange)
+                if (!InAttackRange())
                 {
-                    _attacker.MoveTo(_receiver.transform.position);
+                    _mover.MoveTo(_receiver.transform.position);
                 }
                 else
                 {
-                    _attacker.Cancel();
+                    _mover.Cancel();
                     AttackBehaviour();
                 }
             }
+        }
+
+        private bool InAttackRange()
+        {
+            var distance = Vector3.Distance(transform.position, _receiver.transform.position);
+            return distance <= Configurations.AttackRange;
         }
 
         private void AttackBehaviour()
@@ -64,13 +71,16 @@ namespace Apps.RealTime.Combat
             }
         }
 
-        public void Attack(Receiver receiver, Mover attacker)
+        /// <summary>
+        /// move to the target and attack
+        /// /// </summary>
+        /// <param name="receiver"></param>
+        public void Attack(Receiver receiver)
         {
             // self-attack
             if (transform == receiver.transform) return;
 
             _receiver = receiver;
-            _attacker = attacker;
         }
 
         public void Cancel()

@@ -13,7 +13,7 @@ namespace Apps.RealTime.Core
 
         /// <summary>
         /// allow overriding of actions 
-        /// /// </summary>
+        /// </summary>
         /// <param name="action"></param>
         public void StartAction(IAction action)
         {

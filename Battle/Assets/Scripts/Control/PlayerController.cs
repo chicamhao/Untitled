@@ -50,7 +50,7 @@ namespace Apps.Control
                     if (Input.GetMouseButtonDown(0))
                     {
                         _actionScheduler.StartAction(_fighter);
-                        _fighter.Attack(receiver, _mover);
+                        _fighter.Attack(receiver);
                     }
                     return true;
                 }
