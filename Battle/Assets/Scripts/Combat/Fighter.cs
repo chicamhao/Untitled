@@ -64,6 +64,7 @@ namespace Apps.RealTime.Combat
         // animation event
         public void Hit()
         {
+            // TODO dodge
             if (_receiver != null)
             {
                 // TODO configurable

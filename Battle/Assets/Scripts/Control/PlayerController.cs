@@ -3,7 +3,7 @@ using Apps.RealTime.Core;
 using Apps.RealTime.Movement;
 using UnityEngine;
 
-namespace Apps.Control
+namespace Apps.RealTime.Control
 {
     public sealed class PlayerController : MonoBehaviour
     {

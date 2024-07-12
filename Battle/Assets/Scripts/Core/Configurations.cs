@@ -6,7 +6,11 @@
 		// Combat
 		public static float AttackRange = 2f;
 		public static float AttackDuration = 1.5f;
-		public static float AIChasingRange = 5f;
+
+		// AI
+		public static float ObservantRange = 5f;
+		public static float SuspicionTime = 4f;
+		public static float AtWayPointTime = 2f;
 	}
 }
 

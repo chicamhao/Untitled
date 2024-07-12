@@ -15,15 +15,16 @@ namespace Apps.RealTime.Core
         /// allow overriding of actions 
         /// </summary>
         /// <param name="action"></param>
-        public void StartAction(IAction action)
+        public bool StartAction(IAction action)
         {
             // TODO priority judgment?
-            if (_currentAction == action) return;
+            if (_currentAction == action) return false;
             if (_currentAction != null)
             {
                 _currentAction.Cancel();
             }
             _currentAction = action;
+            return true;
         }
     }
 }
