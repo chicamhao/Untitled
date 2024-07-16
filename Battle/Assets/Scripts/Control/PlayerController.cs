@@ -47,7 +47,7 @@ namespace Apps.RealTime.Control
             {
                 if (hit.transform.TryGetComponent<Receiver>(out var receiver))
                 {
-                    if (Input.GetMouseButtonDown(0))
+                    if (Input.GetMouseButton(0))
                     {
                         _actionScheduler.StartAction(_fighter);
                         _fighter.Attack(receiver);
