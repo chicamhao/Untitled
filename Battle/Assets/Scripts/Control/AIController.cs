@@ -7,7 +7,13 @@ namespace Apps.RealTime.Control
 {
     public sealed class AIController : MonoBehaviour
     {
+        enum Category
+        {
+            Guardian
+        }
+
         [SerializeField] PatrolPath _partrolPath;
+        [SerializeField] Category _category;
 
         Fighter _fighter;
         Receiver _receiver;
@@ -69,16 +75,19 @@ namespace Apps.RealTime.Control
 
         private void Guard()
         {
-            if (_partrolPath != null)
-            {
-                var wayPoint = _partrolPath.GetWayPoint(transform.position);
-                if (wayPoint.AtWayPoint && _timeAtWayPoint >= Configurations.ObservantRange)
-                {
-                    _timeAtWayPoint = 0f;
-                    _currentWayPoint = wayPoint.NextWayPoint;
-                }
-            }
+            if (_category != Category.Guardian) return;
 
+            if (_category == Category.Guardian && _partrolPath == null)
+                throw new System.InvalidOperationException();
+
+            
+            var wayPoint = _partrolPath.GetWayPoint(transform.position);
+            if (wayPoint.AtWayPoint && _timeAtWayPoint >= Configurations.ObservantRange)
+            {
+                _timeAtWayPoint = 0f;
+                _currentWayPoint = wayPoint.NextWayPoint;
+            }
+            
             _actionScheduler.StartAction(_mover);
             _mover.MoveTo(_currentWayPoint);
         }

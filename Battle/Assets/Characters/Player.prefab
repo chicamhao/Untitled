@@ -7,6 +7,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 177997510193377024, guid: 0f3cd3472ef374994a17057aba29b923,
+        type: 3}
+      propertyPath: _health
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 3291602765465636772, guid: 0f3cd3472ef374994a17057aba29b923,
         type: 3}
       propertyPath: m_Name
@@ -30,7 +35,7 @@ PrefabInstance:
     - target: {fileID: 3291602765465636776, guid: 0f3cd3472ef374994a17057aba29b923,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.61
       objectReference: {fileID: 0}
     - target: {fileID: 3291602765465636776, guid: 0f3cd3472ef374994a17057aba29b923,
         type: 3}
@@ -71,6 +76,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3291602765465636778, guid: 0f3cd3472ef374994a17057aba29b923,
+        type: 3}
+      propertyPath: m_Height
+      value: 1.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 3291602765465636778, guid: 0f3cd3472ef374994a17057aba29b923,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 3291602765465636778, guid: 0f3cd3472ef374994a17057aba29b923,
+        type: 3}
+      propertyPath: m_BaseOffset
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3291602765465636778, guid: 0f3cd3472ef374994a17057aba29b923,
+        type: 3}
+      propertyPath: avoidancePriority
+      value: 28
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f3cd3472ef374994a17057aba29b923, type: 3}
