@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace Apps.RealTime.SceneManagers
+namespace Apps.Runtime.SceneManagers
 { 
 	[RequireComponent(typeof(BoxCollider))]
 	public sealed class Portal : MonoBehaviour
@@ -26,7 +25,7 @@ namespace Apps.RealTime.SceneManagers
 
 		IEnumerator TransitionAsync()
 		{
-			yield return SceneManager.LoadSceneAsync(_nextScene);
+			yield return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(_nextScene);
 		}
 	}
 }

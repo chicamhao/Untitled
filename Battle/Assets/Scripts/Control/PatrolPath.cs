@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Apps.RealTime.Control
+namespace Apps.Runtime.Control
 {
     /// <summary>
     /// The scope of the guardian is specified by reference waypoints,

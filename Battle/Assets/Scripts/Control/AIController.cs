@@ -1,9 +1,8 @@
 ﻿using Apps.RealTime.Combat;
-using Apps.RealTime.Core;
-using Apps.RealTime.Movement;
+using Apps.Runtime.Core;
 using UnityEngine;
 
-namespace Apps.RealTime.Control
+namespace Apps.Runtime.Control
 {
     public sealed class AIController : MonoBehaviour
     {
@@ -17,8 +16,8 @@ namespace Apps.RealTime.Control
 
         Fighter _fighter;
         Receiver _receiver;
-        Mover _mover;
-        ActionScheduler _actionScheduler;
+        //Mover _mover;
+        //ActionScheduler _actionScheduler;
 
         // suspecion interval
         float _timeSinceLastSawPlayer = float.MaxValue;
@@ -29,9 +28,12 @@ namespace Apps.RealTime.Control
 
         void Start()
         {
+            enabled = false;
+            return;
+
             _fighter = GetComponent<Fighter>();
-            _mover = GetComponent<Mover>();
-            _actionScheduler = GetComponent<ActionScheduler>();
+            //_mover = GetComponent<Mover>();
+            //_actionScheduler = GetComponent<ActionScheduler>();
 
             _currentWayPoint = transform.position;
 
@@ -54,7 +56,7 @@ namespace Apps.RealTime.Control
             if (InObservantRange())
             {
                 _timeSinceLastSawPlayer = 0f;
-                if (_actionScheduler.StartAction(_fighter))
+              //  if (_actionScheduler.StartAction(_fighter))
                 {
                     _fighter.Attack(_receiver);
                 }
@@ -67,7 +69,7 @@ namespace Apps.RealTime.Control
         {
             if (_timeSinceLastSawPlayer < Configurations.SuspicionTime)
             {
-                _actionScheduler.StartAction(null);
+                //_actionScheduler.StartAction(null);
                 return true;
             }
             return false;
@@ -88,8 +90,8 @@ namespace Apps.RealTime.Control
                 _currentWayPoint = wayPoint.NextWayPoint;
             }
             
-            _actionScheduler.StartAction(_mover);
-            _mover.MoveTo(_currentWayPoint);
+          //  _actionScheduler.StartAction(_mover);
+           // _mover.MoveTo(_currentWayPoint);
         }
 
         private bool InObservantRange()

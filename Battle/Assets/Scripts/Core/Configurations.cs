@@ -1,4 +1,4 @@
-﻿namespace Apps.RealTime.Core
+﻿namespace Apps.Runtime.Core
 {
 	// TODO ScriptableObject
 	public static class Configurations

@@ -1,4 +1,4 @@
-﻿using Apps.RealTime.Core;
+﻿using Apps.Runtime.Core;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,7 +21,7 @@ namespace Apps.RealTime.Combat
                 // TODO cache reference
                 GetComponent<Animator>().SetTrigger(s_dieAnimation);
                 GetComponent<NavMeshAgent>().enabled = false;
-                GetComponent<ActionScheduler>().StartAction(null);
+                //GetComponent<ActionScheduler>().StartAction(null);
                 GetComponent<Fighter>().enabled = false;
             }
         }

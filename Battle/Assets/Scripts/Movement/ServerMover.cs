@@ -1,15 +1,28 @@
-﻿using Apps.RealTime.Core;
+﻿using Apps.Runtime.Core;
+using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Apps.RealTime.Movement
+namespace Apps.Runtime.Movement
 {
-    public sealed class Mover : MonoBehaviour, IAction
+    public sealed class ServerMover : NetworkBehaviour, IAction
     {
+        [SerializeField] NetworkTransform _networkTransform;
         [SerializeField] NavMeshAgent _navMeshAgent;
         [SerializeField] Animator _animator;
 
-        private readonly static int s_forwardSpeedAnimation = Animator.StringToHash("_forwardSpeed");
+        readonly static int s_forwardSpeedAnimation = Animator.StringToHash("_forwardSpeed");
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer)
+            {
+                // only enable this component on server
+                enabled = false;
+                _navMeshAgent.enabled = false;
+            }
+        }
 
         private void Update()
         {
@@ -20,6 +33,12 @@ namespace Apps.RealTime.Movement
         {
             _navMeshAgent.SetDestination(destination);
             _navMeshAgent.isStopped = false;
+        }
+
+        public void Teleport(Vector3 destination)
+        {
+            _networkTransform.Teleport(destination, Quaternion.identity, Vector3.one);
+            _navMeshAgent.isStopped = true;
         }
 
         public void Cancel()

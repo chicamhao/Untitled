@@ -1,5 +1,4 @@
-﻿using Apps.RealTime.Core;
-using Apps.RealTime.Movement;
+﻿using Apps.Runtime.Core;
 using UnityEngine;
 
 namespace Apps.RealTime.Combat
@@ -7,7 +6,7 @@ namespace Apps.RealTime.Combat
     public sealed class Fighter : MonoBehaviour, IAction
     {
         Animator _animator;
-        Mover _mover;
+        //Mover _mover;
 
         Receiver _receiver;
 
@@ -18,7 +17,7 @@ namespace Apps.RealTime.Combat
         private void Start()
         {
             _animator = GetComponent<Animator>();
-            _mover = GetComponent<Mover>();
+           // _mover = GetComponent<Mover>();
         }
 
         public void Update()
@@ -29,11 +28,11 @@ namespace Apps.RealTime.Combat
             {
                 if (!InAttackRange())
                 {
-                    _mover.MoveTo(_receiver.transform.position);
+                   // _mover.MoveTo(_receiver.transform.position);
                 }
                 else
                 {
-                    _mover.Cancel();
+                   // _mover.Cancel();
                     AttackBehaviour();
                 }
             }
@@ -42,7 +41,8 @@ namespace Apps.RealTime.Combat
         private bool InAttackRange()
         {
             var distance = Vector3.Distance(transform.position, _receiver.transform.position);
-            return distance <= Configurations.AttackRange;
+            //return distance <= Configurations.AttackRange;
+            return true;
         }
 
         private void AttackBehaviour()
@@ -52,7 +52,7 @@ namespace Apps.RealTime.Combat
                 transform.LookAt(_receiver.transform);
             }
 
-            if (_durationCounter >= Configurations.AttackDuration)
+            //if (_durationCounter >= Configurations.AttackDuration)
             {
                 _animator.ResetTrigger(s_stopAttackAnimation);
                 _animator.SetTrigger(s_attackAnimation); // this'll trigger Hit()

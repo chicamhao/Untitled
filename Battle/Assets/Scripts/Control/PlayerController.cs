@@ -1,61 +1,81 @@
 using Apps.RealTime.Combat;
-using Apps.RealTime.Core;
-using Apps.RealTime.Movement;
+using Apps.Runtime.Core;
+using Unity.Collections;
+using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
-namespace Apps.RealTime.Control
+namespace Apps.Runtime.Control
 {
-    public sealed class PlayerController : MonoBehaviour
+    /// <summary>
+    /// with multiplay context, it's a client input sender
+    /// </summary>
+    public sealed class PlayerController : NetworkBehaviour
     {
-        [SerializeField] ActionScheduler _actionScheduler;
-        [SerializeField] Mover _mover;
+        //[SerializeField] ActionScheduler _actionScheduler;
+        //[SerializeField] ServerMover _serverMover;
         [SerializeField] Fighter _fighter;
+        [SerializeField] ServerPlayerController _serverPlayerController;
+
+        private Camera _followCamera;
+        public NetworkVariable<int> Health = new(100);
+        public NetworkVariable<FixedString32Bytes> PlayerName = new(new FixedString32Bytes(string.Empty));
+
+        bool _interactRequest;
+
+        private void Start()
+        {
+            DontDestroyOnLoad(this);
+        }
 
         void Update()
         {
-            // TODO since it's physics, should be FixedUpdate
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            var hits = Physics.RaycastAll(ray); // TODO none alloc
-
-            if (InteractAttack(hits)) return;
-            if (InteractMovement(hits)) return;
-        }
-
-        private bool InteractMovement(RaycastHit[] hits)
-        {
-            if (_mover == null) return false;
-
-            foreach (var hit in hits)
+            if (Input.GetMouseButton(0))
             {
-                if (hit.transform.TryGetComponent<Terrain>(out var _))
-                {
-                    if (Input.GetMouseButton(0))
-                    {
-                        _actionScheduler.StartAction(_mover);
-                        _mover.MoveTo(hit.point);
-                        return true;
-                    }
-                }
+                _interactRequest = true;
             }
-
-            return false;
         }
 
-        private bool InteractAttack(RaycastHit[] hits)
+        private void FixedUpdate()
         {
-            foreach (var hit in hits)
+            if (_interactRequest)
             {
-                if (hit.transform.TryGetComponent<Receiver>(out var receiver))
+                _interactRequest = !_interactRequest;
+
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                var hits = Physics.RaycastAll(ray); // TODO none alloc
+
+                foreach (var hit in hits)
                 {
-                    if (Input.GetMouseButton(0))
+                    // attack
+                    if (hit.transform.TryGetComponent<Receiver>(out var receiver))
                     {
-                        _actionScheduler.StartAction(_fighter);
+                        //_actionScheduler.StartAction(_fighter);
                         _fighter.Attack(receiver);
+                        continue;
                     }
-                    return true;
+
+                    // movement
+                    if (hit.transform.TryGetComponent<Terrain>(out var _))
+                    {
+                        _serverPlayerController.RequestMoveRpc(hit.point);
+                        //_actionScheduler.StartAction(_mover);
+                       // _mover.MoveTo(hit.point);
+                        continue;
+                    }
                 }
             }
-            return false;
+
+            if (IsLocalPlayer && _followCamera)
+            {
+                _followCamera.transform.parent.transform.position = transform.position;
+            }
+        }
+
+        public void Inititalize(Vector3 position, Camera camera)
+        {
+            _serverPlayerController.TeleportRpc(position);
+            _followCamera = camera;
         }
     }
 }

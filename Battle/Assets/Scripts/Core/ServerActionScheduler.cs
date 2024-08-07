@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-namespace Apps.RealTime.Core
+namespace Apps.Runtime.Core
 {
     public interface IAction
     {
         void Cancel();
     }
 
-    public sealed class ActionScheduler : MonoBehaviour
+    public sealed class ServerActionScheduler : MonoBehaviour
     {
         IAction _currentAction;
 
