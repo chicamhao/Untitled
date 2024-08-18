@@ -61,7 +61,6 @@ namespace Apps.Runtime.SceneManager
                 ClientNoticeReadyStatusRpc(status.Key, status.Value);
             }
 
-            // lobby rules: switching scene automatically when at least 2 players are readied.
             if (IsAllPlayersReady())
             {
                 SwitchGameplayScene();
@@ -115,6 +114,15 @@ namespace Apps.Runtime.SceneManager
                     OnReadyButtonClicked();
                 }
             }
+            else if (NetworkManager.Singleton.IsHost)
+            {
+                if (GUILayout.Button("Play"))
+                {
+                    SwitchGameplayScene();
+
+                }
+            }
+
             GUILayout.EndArea();
         }
 

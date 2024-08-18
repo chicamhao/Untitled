@@ -1,20 +1,15 @@
-using Apps.RealTime.Combat;
-using Apps.Runtime.Core;
+using Apps.Runtime.Combat;
 using Unity.Collections;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace Apps.Runtime.Control
 {
     /// <summary>
-    /// with multiplay context, it's a client input sender
+    /// as in multiplay context, it's a client input sender
     /// </summary>
     public sealed class PlayerController : NetworkBehaviour
     {
-        //[SerializeField] ActionScheduler _actionScheduler;
-        //[SerializeField] ServerMover _serverMover;
-        [SerializeField] Fighter _fighter;
         [SerializeField] ServerPlayerController _serverPlayerController;
 
         private Camera _followCamera;
@@ -30,7 +25,7 @@ namespace Apps.Runtime.Control
 
         void Update()
         {
-            if (Input.GetMouseButton(0))
+            if (IsLocalPlayer && Input.GetMouseButton(0))
             {
                 _interactRequest = true;
             }
@@ -48,20 +43,17 @@ namespace Apps.Runtime.Control
                 foreach (var hit in hits)
                 {
                     // attack
-                    if (hit.transform.TryGetComponent<Receiver>(out var receiver))
+                    if (hit.transform.TryGetComponent<ServerReceiver>(out var receiver))
                     {
-                        //_actionScheduler.StartAction(_fighter);
-                        _fighter.Attack(receiver);
-                        continue;
+                        _serverPlayerController.AttackRpc(receiver.NetworkObjectId);
+                        break;
                     }
 
                     // movement
                     if (hit.transform.TryGetComponent<Terrain>(out var _))
                     {
-                        _serverPlayerController.RequestMoveRpc(hit.point);
-                        //_actionScheduler.StartAction(_mover);
-                       // _mover.MoveTo(hit.point);
-                        continue;
+                        _serverPlayerController.MoveRpc(hit.point);
+                        break;
                     }
                 }
             }

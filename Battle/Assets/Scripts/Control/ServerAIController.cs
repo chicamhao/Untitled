@@ -1,10 +1,12 @@
-﻿using Apps.RealTime.Combat;
+﻿using Apps.Runtime.Combat;
 using Apps.Runtime.Core;
+using Apps.Runtime.Movement;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Apps.Runtime.Control
 {
-    public sealed class AIController : MonoBehaviour
+    public sealed class ServerAIController : NetworkBehaviour
     {
         enum Category
         {
@@ -14,10 +16,10 @@ namespace Apps.Runtime.Control
         [SerializeField] PatrolPath _partrolPath;
         [SerializeField] Category _category;
 
-        Fighter _fighter;
-        Receiver _receiver;
-        //Mover _mover;
-        //ActionScheduler _actionScheduler;
+        ServerFighter _fighter;
+        ServerReceiver[] _receivers;
+        ServerMover _mover;
+        ServerActionScheduler _actionScheduler;
 
         // suspecion interval
         float _timeSinceLastSawPlayer = float.MaxValue;
@@ -26,19 +28,29 @@ namespace Apps.Runtime.Control
         float _timeAtWayPoint = float.MaxValue;
         Vector3 _currentWayPoint;
 
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer)
+            {
+                enabled = false;
+            }
+        }
+
         void Start()
         {
-            enabled = false;
-            return;
-
-            _fighter = GetComponent<Fighter>();
-            //_mover = GetComponent<Mover>();
-            //_actionScheduler = GetComponent<ActionScheduler>();
+            _fighter = GetComponent<ServerFighter>();
+            _mover = GetComponent<ServerMover>();
+            _actionScheduler = GetComponent<ServerActionScheduler>();
 
             _currentWayPoint = transform.position;
 
-            // TODO multiplayer
-            _receiver = GameObject.FindWithTag("Player").GetComponent<Receiver>();
+            // TODO cache references
+            var players = GameObject.FindGameObjectsWithTag("Player");
+            _receivers = new ServerReceiver[players.Length];
+            for (int i = 0; i < players.Length; i++)
+            {
+                _receivers[i] = players[i].GetComponent<ServerReceiver>();
+            }
         }
 
         void Update()
@@ -46,19 +58,22 @@ namespace Apps.Runtime.Control
             _timeSinceLastSawPlayer += Time.deltaTime;
             _timeAtWayPoint += Time.deltaTime;
 
-            if (TryAttack()) return;
+            foreach (var receiver in _receivers)
+            {
+                if (TryAttack(receiver)) return;
+            }
             if (TrySuspect()) return;
             Guard();
         }
 
-        private bool TryAttack()
+        private bool TryAttack(ServerReceiver receiver)
         {
-            if (InObservantRange())
+            if (InObservantRange(receiver))
             {
                 _timeSinceLastSawPlayer = 0f;
-              //  if (_actionScheduler.StartAction(_fighter))
+                if (_actionScheduler.StartAction(_fighter))
                 {
-                    _fighter.Attack(_receiver);
+                    _fighter.Attack(receiver);
                 }
                 return true;
             }
@@ -69,7 +84,7 @@ namespace Apps.Runtime.Control
         {
             if (_timeSinceLastSawPlayer < Configurations.SuspicionTime)
             {
-                //_actionScheduler.StartAction(null);
+                _actionScheduler.StartAction(null);
                 return true;
             }
             return false;
@@ -90,13 +105,13 @@ namespace Apps.Runtime.Control
                 _currentWayPoint = wayPoint.NextWayPoint;
             }
             
-          //  _actionScheduler.StartAction(_mover);
-           // _mover.MoveTo(_currentWayPoint);
+            _actionScheduler.StartAction(_mover);
+            _mover.MoveTo(_currentWayPoint);
         }
 
-        private bool InObservantRange()
+        private bool InObservantRange(ServerReceiver receiver)
         {
-            var distance = Vector3.Distance(gameObject.transform.position, _receiver.transform.position);
+            var distance = Vector3.Distance(gameObject.transform.position, receiver.transform.position);
             return distance <= Configurations.ObservantRange;
         }
 

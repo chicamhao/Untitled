@@ -1,16 +1,16 @@
-﻿using UnityEngine;
-using Unity.Netcode;
-using Apps.Runtime.Movement;
+﻿using Apps.Runtime.Combat;
 using Apps.Runtime.Core;
-using System;
-using Unity.Netcode.Components;
+using Apps.Runtime.Movement;
+using Unity.Netcode;
+using UnityEngine;
 
 namespace Apps.Runtime.Control
 {
-	public sealed class ServerPlayerController : NetworkBehaviour
+    public sealed class ServerPlayerController : NetworkBehaviour
 	{
-		[SerializeField] ServerActionScheduler _actionScheduler;
-		[SerializeField] ServerMover _mover;
+		ServerActionScheduler _actionScheduler;
+		ServerMover _mover;
+		ServerFighter _fighter;
 
         public override void OnNetworkSpawn()
         {
@@ -19,20 +19,32 @@ namespace Apps.Runtime.Control
 				enabled = false;
 				return;
 			}
+
+			_actionScheduler = GetComponent<ServerActionScheduler>();
+			_mover = GetComponent<ServerMover>();
+			_fighter = GetComponent<ServerFighter>();
         }
 
         [Rpc(SendTo.Server)]
-		public void RequestMoveRpc(Vector3 destination)
+		public void MoveRpc(Vector3 destination)
 		{
 			_actionScheduler.StartAction(_mover);
 			_mover.MoveTo(destination);
 		}
 
 		[Rpc(SendTo.Server)]
-        public void TeleportRpc(Vector3 position)
+		public void AttackRpc(ulong receiverObjectId)
+		{
+			var receiver = NetworkManager.SpawnManager.SpawnedObjects[receiverObjectId]
+				.GetComponent<ServerReceiver>(); // TODO cache reference
+            _fighter.Attack(receiver);
+			_actionScheduler.StartAction(_fighter);
+		}
+
+		[Rpc(SendTo.Server)]
+        public void TeleportRpc(Vector3 destination)
         {
-			_mover.Teleport(position);
+			_mover.Teleport(destination);
         }
     }
-
 }
