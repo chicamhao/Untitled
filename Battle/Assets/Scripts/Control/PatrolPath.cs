@@ -3,8 +3,8 @@
 namespace Apps.Runtime.Control
 {
     /// <summary>
-    /// The scope of the guardian is specified by reference waypoints,
-    /// which are linked to the environment, not the guardian ​​itself.
+    /// The moveable scope of the guardian is specified by reference waypoints(path),
+    /// the path which are attached to the environment(map), not the guardian ​themself.
     /// </summary>
 	public sealed class PatrolPath : MonoBehaviour
 	{
@@ -40,7 +40,6 @@ namespace Apps.Runtime.Control
 
             return new WayPoint(false, Vector3.zero);
         }
-
 
         public readonly struct WayPoint
         {

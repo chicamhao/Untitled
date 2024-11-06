@@ -17,7 +17,7 @@ namespace Apps.Runtime.Control
         [SerializeField] Category _category;
 
         ServerFighter _fighter;
-        ServerReceiver[] _receivers;
+        public ServerReceiver[] _receivers;
         ServerMover _mover;
         ServerActionScheduler _actionScheduler;
 
@@ -33,11 +33,9 @@ namespace Apps.Runtime.Control
             if (!IsServer)
             {
                 enabled = false;
+                return;
             }
-        }
 
-        void Start()
-        {
             _fighter = GetComponent<ServerFighter>();
             _mover = GetComponent<ServerMover>();
             _actionScheduler = GetComponent<ServerActionScheduler>();
@@ -46,6 +44,7 @@ namespace Apps.Runtime.Control
 
             // TODO cache references
             var players = GameObject.FindGameObjectsWithTag("Player");
+
             _receivers = new ServerReceiver[players.Length];
             for (int i = 0; i < players.Length; i++)
             {
@@ -60,6 +59,7 @@ namespace Apps.Runtime.Control
 
             foreach (var receiver in _receivers)
             {
+                if (receiver == null) continue; 
                 if (TryAttack(receiver)) return;
             }
             if (TrySuspect()) return;
@@ -96,8 +96,7 @@ namespace Apps.Runtime.Control
 
             if (_category == Category.Guardian && _partrolPath == null)
                 throw new System.InvalidOperationException();
-
-            
+         
             var wayPoint = _partrolPath.GetWayPoint(transform.position);
             if (wayPoint.AtWayPoint && _timeAtWayPoint >= Configurations.ObservantRange)
             {

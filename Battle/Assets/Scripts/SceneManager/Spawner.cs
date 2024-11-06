@@ -8,13 +8,12 @@ namespace Apps.Runtime.SceneManager
     {
         [SerializeField] Transform _appearancePosition;
 
-        NetworkManager _networkManager;
-
         void Start()
         {
-            _networkManager = FindFirstObjectByType<NetworkManager>();
-            
-            var player = _networkManager.SpawnManager.GetLocalPlayerObject();
+            if (NetworkManager.Singleton == null)
+                throw new System.Exception("Requiring initialization from boot.scene");
+
+            var player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
             player.GetComponent<PlayerController>().Inititalize(_appearancePosition.position, Camera.main);            
         }
     }

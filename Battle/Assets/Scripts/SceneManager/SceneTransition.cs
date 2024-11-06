@@ -51,6 +51,7 @@ namespace Apps.Runtime.SceneManager
             {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(ToSceneName(state));
             }
+            OnSceneChanged?.Invoke(_state);
         }
 
         private static string ToSceneName(SceneState state) => state.ToString().ToLower();
@@ -64,7 +65,6 @@ namespace Apps.Runtime.SceneManager
         {
             _loadCompletedCount++;
             OnClientLoadedScene?.Invoke(clientId);
-            Debug.Log("load completed" + _loadCompletedCount);
         }
     }
 }
