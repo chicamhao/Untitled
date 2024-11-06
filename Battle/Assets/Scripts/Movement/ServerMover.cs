@@ -35,9 +35,9 @@ namespace Apps.Runtime.Movement
             _navMeshAgent.isStopped = false;
         }
 
-        public void Teleport(Vector3 destination)
+        public void Teleport(Vector3 position, Quaternion rotation)
         {
-            _networkTransform.Teleport(destination, Quaternion.identity, Vector3.one);
+            _networkTransform.Teleport(position, rotation, Vector3.one);
             _navMeshAgent.isStopped = true;
         }
 

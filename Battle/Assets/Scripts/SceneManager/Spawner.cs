@@ -14,7 +14,7 @@ namespace Apps.Runtime.SceneManager
                 throw new System.Exception("Requiring initialization from boot.scene");
 
             var player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
-            player.GetComponent<PlayerController>().Inititalize(_appearancePosition.position, Camera.main);            
+            player.GetComponent<PlayerController>().Inititalize(_appearancePosition.position, Quaternion.identity, Camera.main);            
         }
     }
 }

@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using Apps.Runtime.Movement;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace Apps.Runtime.SceneManager
@@ -8,7 +11,8 @@ namespace Apps.Runtime.SceneManager
     {
         private string _statusText;
         private readonly Dictionary<ulong, bool> _clientStatuses = new();
-
+        [SerializeField] List<Transform> _linePositions;
+        
         public override void OnNetworkSpawn()
         {
             _clientStatuses.Add(NetworkManager.Singleton.LocalClientId, false);
@@ -32,18 +36,22 @@ namespace Apps.Runtime.SceneManager
             {
                 _clientStatuses.Add(data.ClientId, false);
             }
+
             OnStatusChanged();
         }
 
         private void ClientOnLoadedScene(ulong clientId)
         {
-            Debug.Log("client on loaded scene, server: " + IsServer);
             if (!IsServer) return;
 
             if (!_clientStatuses.ContainsKey(clientId))
             {
                 _clientStatuses.Add(clientId, false);
             }
+            // place the connected player into appearance line.
+            var connected = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId);
+            var transform = _linePositions[_clientStatuses.Count - 1];
+            connected.GetComponent<ServerMover>().Teleport(transform.position, transform.rotation);
 
             OnStatusChanged();
         }

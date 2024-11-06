@@ -64,9 +64,9 @@ namespace Apps.Runtime.Control
             }
         }
 
-        public void Inititalize(Vector3 position, Camera camera)
+        public void Inititalize(Vector3 position, Quaternion rotation, Camera camera)
         {
-            _serverPlayerController.TeleportRpc(position);
+            _serverPlayerController.TeleportRpc(position, rotation);
             _followCamera = camera;
         }
     }

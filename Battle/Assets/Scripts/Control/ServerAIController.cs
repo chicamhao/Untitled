@@ -36,12 +36,6 @@ namespace Apps.Runtime.Control
                 return;
             }
 
-            _fighter = GetComponent<ServerFighter>();
-            _mover = GetComponent<ServerMover>();
-            _actionScheduler = GetComponent<ServerActionScheduler>();
-
-            _currentWayPoint = transform.position;
-
             // TODO cache references
             var players = GameObject.FindGameObjectsWithTag("Player");
 
@@ -50,6 +44,15 @@ namespace Apps.Runtime.Control
             {
                 _receivers[i] = players[i].GetComponent<ServerReceiver>();
             }
+        }
+
+        private void Start()
+        {
+            _fighter = GetComponent<ServerFighter>();
+            _mover = GetComponent<ServerMover>();
+            _actionScheduler = GetComponent<ServerActionScheduler>();
+
+            _currentWayPoint = transform.position;
         }
 
         void Update()

@@ -42,9 +42,9 @@ namespace Apps.Runtime.Control
 		}
 
 		[Rpc(SendTo.Server)]
-        public void TeleportRpc(Vector3 destination)
+        public void TeleportRpc(Vector3 position, Quaternion rotation)
         {
-			_mover.Teleport(destination);
+			_mover.Teleport(position, rotation);
         }
     }
 }
