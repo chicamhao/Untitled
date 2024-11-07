@@ -1,10 +1,10 @@
-using Apps.Runtime.Control;
+using Apps.Runtime.Movement;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Apps.Runtime.SceneManager
+namespace Apps.Runtime.Control
 {
-    public sealed class Spawner : MonoBehaviour
+    public sealed class Spawner : MonoBehaviour, IFollowCamera
     {
         [SerializeField] Transform _appearancePosition;
 
@@ -14,7 +14,12 @@ namespace Apps.Runtime.SceneManager
                 throw new System.Exception("Requiring initialization from boot.scene");
 
             var player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
-            player.GetComponent<PlayerController>().Inititalize(_appearancePosition.position, Quaternion.identity, Camera.main);            
+            player.GetComponent<PlayerController>().Inititalize(_appearancePosition.position, Quaternion.identity, this);            
+        }
+
+        public void Follow(Transform player)
+        {
+            transform.position = player.position;
         }
     }
 }

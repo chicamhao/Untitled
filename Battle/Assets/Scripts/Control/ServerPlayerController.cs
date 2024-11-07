@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace Apps.Runtime.Control
 {
-    public sealed class ServerPlayerController : NetworkBehaviour
+	public sealed class ServerPlayerController : NetworkBehaviour
 	{
 		ServerActionScheduler _actionScheduler;
 		ServerMover _mover;
 		ServerFighter _fighter;
 
-        public override void OnNetworkSpawn()
-        {
+		public override void OnNetworkSpawn()
+		{
 			if (!IsServer)
 			{
 				enabled = false;
@@ -23,9 +23,9 @@ namespace Apps.Runtime.Control
 			_actionScheduler = GetComponent<ServerActionScheduler>();
 			_mover = GetComponent<ServerMover>();
 			_fighter = GetComponent<ServerFighter>();
-        }
+		}
 
-        [Rpc(SendTo.Server)]
+		[Rpc(SendTo.Server)]
 		public void MoveRpc(Vector3 destination)
 		{
 			_actionScheduler.StartAction(_mover);
@@ -37,14 +37,14 @@ namespace Apps.Runtime.Control
 		{
 			var receiver = NetworkManager.SpawnManager.SpawnedObjects[receiverObjectId]
 				.GetComponent<ServerReceiver>(); // TODO cache reference
-            _fighter.Attack(receiver);
+			_fighter.Attack(receiver);
 			_actionScheduler.StartAction(_fighter);
 		}
 
 		[Rpc(SendTo.Server)]
-        public void TeleportRpc(Vector3 position, Quaternion rotation)
-        {
+		public void TeleportRpc(Vector3 position, Quaternion rotation)
+		{
 			_mover.Teleport(position, rotation);
-        }
+		}
     }
 }

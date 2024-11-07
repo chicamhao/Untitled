@@ -1,5 +1,5 @@
 using Apps.Runtime.Combat;
-using Unity.Collections;
+using Apps.Runtime.Movement;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,9 +12,8 @@ namespace Apps.Runtime.Control
     {
         [SerializeField] ServerPlayerController _serverPlayerController;
 
-        private Camera _followCamera;
-        public NetworkVariable<int> Health = new(100);
-        public NetworkVariable<FixedString32Bytes> PlayerName = new(new FixedString32Bytes(string.Empty));
+        IFollowCamera _followCamera;
+        public NetworkVariable<int> Health = new(100); // TODO configurable
 
         bool _interactRequest;
 
@@ -58,13 +57,13 @@ namespace Apps.Runtime.Control
                 }
             }
 
-            if (IsLocalPlayer && _followCamera)
+            if (IsLocalPlayer && _followCamera != null)
             {
-                _followCamera.transform.parent.transform.position = transform.position;
+                _followCamera.Follow(transform);
             }
         }
 
-        public void Inititalize(Vector3 position, Quaternion rotation, Camera camera)
+        public void Inititalize(Vector3 position, Quaternion rotation, IFollowCamera camera)
         {
             _serverPlayerController.TeleportRpc(position, rotation);
             _followCamera = camera;

@@ -17,7 +17,7 @@ namespace Apps.Runtime.Control
         [SerializeField] Category _category;
 
         ServerFighter _fighter;
-        public ServerReceiver[] _receivers;
+        ServerReceiver[] _receivers;
         ServerMover _mover;
         ServerActionScheduler _actionScheduler;
 

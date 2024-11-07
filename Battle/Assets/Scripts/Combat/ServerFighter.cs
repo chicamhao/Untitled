@@ -7,8 +7,12 @@ namespace Apps.Runtime.Combat
 {
     public sealed class ServerFighter : NetworkBehaviour, IAction
     {
+        [SerializeField] Weapon _weapon;
+        [SerializeField] Transform _rootTransform;
+
         Animator _animator;
         ServerMover _mover;
+        
 
         ServerReceiver _receiver;
 
@@ -34,6 +38,7 @@ namespace Apps.Runtime.Combat
                 }
                 else
                 {
+                    // stop moving and start attacking
                     _mover.Cancel();
                     AttackBehaviour();
                 }
@@ -43,7 +48,7 @@ namespace Apps.Runtime.Combat
         private bool InAttackRange()
         {
             var distance = Vector3.Distance(transform.position, _receiver.transform.position);
-            return distance <= Configurations.AttackRange;
+            return distance <= _weapon.Range;
         }
 
         private void AttackBehaviour()
@@ -53,7 +58,7 @@ namespace Apps.Runtime.Combat
                 transform.LookAt(_receiver.transform);
             }
 
-            if (_durationCounter >= Configurations.AttackDuration)
+            if (_durationCounter >= _weapon.Duration)
             {
                 _animator.ResetTrigger(s_stopAttackAnimation);
                 _animator.SetTrigger(s_attackAnimation); // this'll trigger Hit()
@@ -68,8 +73,7 @@ namespace Apps.Runtime.Combat
             // TODO dodge
             if (_receiver != null)
             {
-                // TODO configurable
-                _receiver.Receive(damage: 50f);
+                _receiver.Receive(_weapon.Damage);
             }
         }
 
@@ -93,6 +97,12 @@ namespace Apps.Runtime.Combat
             _animator.ResetTrigger(s_attackAnimation);
             _animator.SetTrigger(s_stopAttackAnimation);
             _receiver = null;
+        }
+
+        public void Pickup(Weapon weapon)
+        {
+            _weapon = weapon;
+            _weapon.Spawn(_rootTransform, _animator);
         }
     }
 }
