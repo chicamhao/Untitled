@@ -1,3 +1,4 @@
+using Apps.Runtime.Core;
 using UnityEngine;
 
 namespace Apps.Runtime.Combat
@@ -21,7 +22,7 @@ namespace Apps.Runtime.Combat
 
         public void Spawn(Transform root, Animator animator)
         {
-            Instantiate(_weaponPrefab, root.Find(_handBoneName));
+            Instantiate(_weaponPrefab, AlgorithmHelper.RecursiveFindChild(root, _handBoneName));
             animator.runtimeAnimatorController = _animatorOnverride;           
         }
     }

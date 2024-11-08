@@ -12,8 +12,6 @@ namespace Apps.Runtime.Combat
 
         Animator _animator;
         ServerMover _mover;
-        
-
         ServerReceiver _receiver;
 
         float _durationCounter;
@@ -83,12 +81,6 @@ namespace Apps.Runtime.Combat
         /// <param name="receiver"></param>
         public void Attack(ServerReceiver receiver)
         {
-            // self-attack
-            if (transform == receiver.transform) return;
-
-            // ally attack
-            if (receiver.CompareTag(tag)) return;
-
             _receiver = receiver;
         }
 

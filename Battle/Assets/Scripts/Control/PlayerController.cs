@@ -37,22 +37,21 @@ namespace Apps.Runtime.Control
                 _interactRequest = !_interactRequest;
 
                 var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                var hits = Physics.RaycastAll(ray); // TODO none alloc
-
-                foreach (var hit in hits)
+                if (Physics.Raycast(ray, out var hit)) // TODO none alloc
                 {
                     // attack
                     if (hit.transform.TryGetComponent<ServerReceiver>(out var receiver))
                     {
-                        _serverPlayerController.AttackRpc(receiver.NetworkObjectId);
-                        break;
+                        if (!receiver.CompareTag(tag))
+                        {
+                            _serverPlayerController.AttackRpc(receiver.NetworkObjectId);
+                        }
                     }
 
                     // movement
-                    if (hit.transform.TryGetComponent<Terrain>(out var _))
+                    else if (hit.transform.TryGetComponent<Terrain>(out var _))
                     {
                         _serverPlayerController.MoveRpc(hit.point);
-                        break;
                     }
                 }
             }

@@ -14,6 +14,7 @@ namespace Apps.Runtime.Combat
             if (other.CompareTag("Player"))
             {
                 other.GetComponent<ServerFighter>().Pickup(_weapon);
+                gameObject.SetActive(false); // TODO pool
             }
         }
     }

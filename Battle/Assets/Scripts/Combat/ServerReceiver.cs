@@ -24,7 +24,18 @@ namespace Apps.Runtime.Combat
                 GetComponent<NavMeshAgent>().enabled = false;
                 GetComponent<ServerActionScheduler>().StartAction(null);
                 GetComponent<ServerFighter>().enabled = false;
-                GetComponent<ServerAIController>().enabled = false; // TODO round reference
+
+                // TODO resolve round reference
+                if (TryGetComponent<PlayerController>(out var p))
+                {
+                    p.enabled = false;
+                }
+
+                // TODO resolve round reference
+                if (TryGetComponent<ServerAIController>(out var ai))
+                {
+                    ai.enabled = false; 
+                }
             }
         }
     }
