@@ -1,4 +1,3 @@
-using Apps.Runtime.Core;
 using UnityEngine;
 
 namespace Apps.Runtime.Combat
@@ -6,8 +5,13 @@ namespace Apps.Runtime.Combat
     [CreateAssetMenu(fileName = "Weapon", menuName = "Scriptable Objects/Weapon")]
     public class Weapon : ScriptableObject
     {
+        public AnimatorOverrideController AnimatorOnverride => _animatorOnverride;
         [SerializeField] AnimatorOverrideController _animatorOnverride;
+
+        public GameObject WeaponPrefab => _weaponPrefab;
         [SerializeField] GameObject _weaponPrefab;
+
+        public string HandBoneName => _handBoneName;
         [SerializeField] string _handBoneName = "Hand_R";
 
         [Header("Runtime")]
@@ -19,11 +23,5 @@ namespace Apps.Runtime.Combat
 
         public float Duration => _duration;
         [SerializeField] float _duration = 1.5f;
-
-        public void Spawn(Transform root, Animator animator)
-        {
-            Instantiate(_weaponPrefab, AlgorithmHelper.RecursiveFindChild(root, _handBoneName));
-            animator.runtimeAnimatorController = _animatorOnverride;           
-        }
     }
 }

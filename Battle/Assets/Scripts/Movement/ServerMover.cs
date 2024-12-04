@@ -31,6 +31,14 @@ namespace Apps.Runtime.Movement
 
         public void MoveTo(Vector3 destination)
         {
+            if (Mathf.Approximately(0.01f, Vector3.Distance(destination, transform.position)))
+            {
+                Debug.Log("moveto");
+
+                _navMeshAgent.isStopped = true;
+                return;
+            }
+
             _navMeshAgent.SetDestination(destination);
             _navMeshAgent.isStopped = false;
         }
@@ -38,6 +46,7 @@ namespace Apps.Runtime.Movement
         public void Teleport(Vector3 position, Quaternion rotation)
         {
             _networkTransform.Teleport(position, rotation, Vector3.one);
+            _navMeshAgent.Warp(position);
             _navMeshAgent.isStopped = true;
         }
 

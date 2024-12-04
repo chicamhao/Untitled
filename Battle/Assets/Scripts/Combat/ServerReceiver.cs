@@ -21,8 +21,8 @@ namespace Apps.Runtime.Combat
             {
                 // TODO cache reference
                 GetComponent<Animator>().SetTrigger(s_dieAnimation);
-                GetComponent<NavMeshAgent>().enabled = false;
                 GetComponent<ServerActionScheduler>().StartAction(null);
+                GetComponent<NavMeshAgent>().enabled = false;
                 GetComponent<ServerFighter>().enabled = false;
 
                 // TODO resolve round reference

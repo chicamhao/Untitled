@@ -8,7 +8,6 @@ namespace Apps.Runtime.Combat
     public sealed class ServerFighter : NetworkBehaviour, IAction
     {
         [SerializeField] Weapon _weapon;
-        [SerializeField] Transform _rootTransform;
 
         Animator _animator;
         ServerMover _mover;
@@ -21,7 +20,7 @@ namespace Apps.Runtime.Combat
         private void Start()
         {
             _animator = GetComponent<Animator>();
-           _mover = GetComponent<ServerMover>();
+            _mover = GetComponent<ServerMover>();
         }
 
         public void Update()
@@ -91,10 +90,9 @@ namespace Apps.Runtime.Combat
             _receiver = null;
         }
 
-        public void Pickup(Weapon weapon)
+        public void ChangeWeapon(Weapon weapon)
         {
             _weapon = weapon;
-            _weapon.Spawn(_rootTransform, _animator);
         }
     }
 }
