@@ -7,11 +7,12 @@ namespace Apps.Sandbox
 {
     public sealed class DebugSpawner : MonoBehaviour, IFollowCamera
     {
-        void Start()
+        public void Start()
         {
             NetworkManager.Singleton.StartHost();
             var player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
-            player.GetComponent<PlayerController>().Inititalize(transform.position, Quaternion.identity, this);
+            var control = player.GetComponent<PlayerController>();
+            control.SetFollowCamera(this);
         }
 
         public void Follow(Transform player)

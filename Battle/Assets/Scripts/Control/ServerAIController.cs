@@ -30,15 +30,13 @@ namespace Apps.Runtime.Control
 
         public override void OnNetworkSpawn()
         {
-            if (!IsServer)
-            {
-                enabled = false;
-                return;
-            }
+            enabled = IsServer;
+
+            // TODO configurable
+            GetComponent<Status>().Initialize(200); 
 
             // TODO cache references
             var players = GameObject.FindGameObjectsWithTag("Player");
-
             _receivers = new ServerReceiver[players.Length];
             for (int i = 0; i < players.Length; i++)
             {

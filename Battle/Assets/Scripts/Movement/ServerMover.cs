@@ -16,12 +16,8 @@ namespace Apps.Runtime.Movement
 
         public override void OnNetworkSpawn()
         {
-            if (!IsServer)
-            {
-                // only enable this component on server
-                enabled = false;
-                _navMeshAgent.enabled = false;
-            }
+            enabled = IsServer;
+            _navMeshAgent.enabled = IsServer;          
         }
 
         private void Update()
@@ -33,8 +29,6 @@ namespace Apps.Runtime.Movement
         {
             if (Mathf.Approximately(0.01f, Vector3.Distance(destination, transform.position)))
             {
-                Debug.Log("moveto");
-
                 _navMeshAgent.isStopped = true;
                 return;
             }

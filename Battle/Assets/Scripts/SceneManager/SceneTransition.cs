@@ -11,7 +11,8 @@ namespace Apps.Runtime.SceneManager
             Boot,
             Menu,
             Lobby,
-            Gameplay
+            Gameplay,
+            Result,
         }
 
         // TODO DI

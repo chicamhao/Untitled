@@ -4,7 +4,7 @@ namespace Apps.Runtime.Core
 {
 	public static class AlgorithmHelper
 	{
-        // TODO use for temporary purposes because backtracking is expensive
+        // TODO use for temporary purposes, since this backtracking approach's expensive
         public static Transform RecursiveFindChild(Transform parent, string childName)
         {
             foreach (Transform child in parent)

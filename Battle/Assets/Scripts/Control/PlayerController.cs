@@ -13,7 +13,6 @@ namespace Apps.Runtime.Control
         [SerializeField] ServerPlayerController _serverPlayerController;
 
         IFollowCamera _followCamera;
-        public NetworkVariable<int> Health = new(100); // TODO configurable
 
         bool _interactRequest;
 
@@ -62,10 +61,14 @@ namespace Apps.Runtime.Control
             }
         }
 
-        public void Inititalize(Vector3 position, Quaternion rotation, IFollowCamera camera)
+        public void SetFollowCamera(IFollowCamera camera)
+        {
+            _followCamera = camera;
+        }
+
+        public void Teleport(Vector3 position, Quaternion rotation)
         {
             _serverPlayerController.TeleportRpc(position, rotation);
-            _followCamera = camera;
         }
     }
 }

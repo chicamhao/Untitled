@@ -14,18 +14,17 @@ namespace Apps.Runtime.Control
 
 		public override void OnNetworkSpawn()
 		{
-			if (!IsServer)
-			{
-				enabled = false;
-				return;
-			}
-
-			_actionScheduler = GetComponent<ServerActionScheduler>();
-			_mover = GetComponent<ServerMover>();
-			_fighter = GetComponent<ServerFighter>();
+			enabled = IsServer;
 		}
 
-		[Rpc(SendTo.Server)]
+        public void Start()
+        {
+            _actionScheduler = GetComponent<ServerActionScheduler>();
+            _mover = GetComponent<ServerMover>();
+            _fighter = GetComponent<ServerFighter>();
+        }
+
+        [Rpc(SendTo.Server)]
 		public void MoveRpc(Vector3 destination)
 		{
 			_actionScheduler.StartAction(_mover);

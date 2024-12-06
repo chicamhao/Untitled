@@ -14,6 +14,11 @@ namespace Apps.Runtime.Combat
         GameObject _handedWeapon;
         Weapon _weapon;
 
+        public override void OnNetworkSpawn()
+        {
+            enabled = IsServer;
+        }
+
         private void Start()
         {
             _fighter = GetComponent<ServerFighter>();

@@ -18,8 +18,8 @@ namespace Apps.Runtime.Combat
         public float Range => _range;
         [SerializeField] float _range = 2f;
 
-        public float Damage => _damage;
-        [SerializeField] float _damage = 50f;
+        public uint Damage => _damage;
+        [SerializeField] uint _damage = 50;
 
         public float Duration => _duration;
         [SerializeField] float _duration = 1.5f;

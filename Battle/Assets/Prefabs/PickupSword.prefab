@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 9069024802921381637}
   - component: {fileID: 1824829812278868763}
   - component: {fileID: 6928786527263164532}
+  - component: {fileID: 7147998123830303606}
   m_Layer: 0
   m_Name: PickupSword
-  m_TagString: Untagged
+  m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,8 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2858356422
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 3309900602
+  InScenePlacedSourceGlobalObjectIdHash: 274551767
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -90,6 +91,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.51, y: 1.64, z: 0.46}
   m_Center: {x: 0, y: 0.54, z: 0}
+--- !u!114 &7147998123830303606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 722934309767292980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1 &7138854670025594213
 GameObject:
   m_ObjectHideFlags: 0

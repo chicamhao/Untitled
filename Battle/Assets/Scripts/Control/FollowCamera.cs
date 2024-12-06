@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Apps.Runtime.Control
 {
-    public sealed class Spawner : MonoBehaviour, IFollowCamera
+    public sealed class FollowCamera : MonoBehaviour, IFollowCamera
     {
         [SerializeField] Transform _appearancePosition;
 
@@ -14,7 +14,7 @@ namespace Apps.Runtime.Control
                 throw new System.Exception("Requiring initialization from boot.scene");
 
             var player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
-            player.GetComponent<PlayerController>().Inititalize(_appearancePosition.position, Quaternion.identity, this);            
+            player.GetComponent<PlayerController>().SetFollowCamera(this);            
         }
 
         public void Follow(Transform player)

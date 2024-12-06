@@ -17,6 +17,11 @@ namespace Apps.Runtime.Combat
         private readonly static int s_attackAnimation = Animator.StringToHash("_attack");
         private readonly static int s_stopAttackAnimation = Animator.StringToHash("_stopAttack");
 
+        public override void OnNetworkSpawn()
+        {
+            enabled = IsServer;
+        }
+
         private void Start()
         {
             _animator = GetComponent<Animator>();
@@ -27,15 +32,16 @@ namespace Apps.Runtime.Combat
         {
             _durationCounter += Time.deltaTime;
 
-            if (_receiver != null && !_receiver.IsDead)
+            if (IsAttacking())
             {
+                // appoach the enemy 
                 if (!InAttackRange())
                 {
                     _mover.MoveTo(_receiver.transform.position);
                 }
+                // start attacking
                 else
                 {
-                    // stop moving and start attacking
                     _mover.Cancel();
                     AttackBehaviour();
                 }
@@ -50,10 +56,7 @@ namespace Apps.Runtime.Combat
 
         private void AttackBehaviour()
         {
-            if (_receiver != null)
-            {
-                transform.LookAt(_receiver.transform);
-            }
+            transform.LookAt(_receiver.transform);      
 
             if (_durationCounter >= _weapon.Duration)
             {
@@ -64,15 +67,25 @@ namespace Apps.Runtime.Combat
             }
         }
 
-        // animation event
+
+        #region animation event
         public void Hit()
         {
-            // TODO dodge
-            if (_receiver != null)
+            if (IsAttacking())
             {
                 _receiver.Receive(_weapon.Damage);
+                if (_receiver.IsDead())
+                {
+                    Cancel();
+                }
             }
         }
+
+        public void Shot()
+        {
+            Hit();
+        }
+        #endregion
 
         /// <summary>
         /// move to the target and attack
@@ -82,6 +95,8 @@ namespace Apps.Runtime.Combat
         {
             _receiver = receiver;
         }
+
+        private bool IsAttacking() => _receiver != null;
 
         public void Cancel()
         {

@@ -10,6 +10,7 @@ namespace Apps.Runtime.SceneManager
     {
         // TODO input field
         [SerializeField] string _ip = "127.0.0.1​";
+        [SerializeField] ushort _port = 7777;
 
         [SerializeField] Button _startGameButton;
         [SerializeField] Button _joinGameButton;
@@ -32,7 +33,7 @@ namespace Apps.Runtime.SceneManager
         private void ConnectUnityTranport()
         {
             var transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport as UnityTransport;
-            transport.SetConnectionData(Sanitize(_ip), 7777);
+            transport.SetConnectionData(Sanitize(_ip), _port);
         }
 
         // TODO menu creation
