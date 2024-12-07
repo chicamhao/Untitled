@@ -1,10 +1,21 @@
-# Untitled
-Genre:  3rd-Person Action RPG, multiplayer
+# Profile
+A multiplayer, action role-playing game prototype.
+- Tech Stack: Unity 6,  Netcode for GameObjects.
+# Progress
+* Available:
+  - Combat mechanic with real-time multiplayer synchronization.
+  - Weapon changes.
+  - Game balance.
+  - Local lobby.
+  - AI: Guardian.
 
-Tech Stack: Unity 2022,  Netcode for GameObjects. Audacity for SFX.
-   
-Platforms: Mobile + PC.
-
-Progress:
-  - movement, animation, combat mechanic (sandbox): 80%
-  - EnemyAI, multiplayer: 0%
+* In progress:
+  - Level design.
+  - Camera improvement.
+  - AI: Marksman.
+     
+* Planed:
+  - UI creation.
+  - Audio intergration.
+  - Visual improvement.
+  - Multiplay: match-making.
