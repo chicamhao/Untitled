@@ -11,8 +11,9 @@ namespace Apps.Runtime.Combat
         ServerFighter _fighter;
         Animator _animator;
 
-        GameObject _handedWeapon;
         Weapon _weapon;
+        public GameObject HandedWeapon => _handedWeapon;
+        GameObject _handedWeapon;
 
         public override void OnNetworkSpawn()
         {
@@ -27,7 +28,7 @@ namespace Apps.Runtime.Combat
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Pickup"))
+            if (IsServer && other.CompareTag("Pickup"))
             {
                 if (_handedWeapon != null)
                 {
@@ -38,7 +39,7 @@ namespace Apps.Runtime.Combat
                 _handedWeapon = Instantiate(_weapon.WeaponPrefab, AlgorithmHelper.RecursiveFindChild(_rootTransform, _weapon.HandBoneName));
 
                 // change weapon stats
-                _fighter.ChangeWeapon(_weapon);
+                _fighter.ChangeWeapon(_weapon, _handedWeapon);
 
                 // change attack animation
                 _animator.runtimeAnimatorController = _weapon.AnimatorOnverride;

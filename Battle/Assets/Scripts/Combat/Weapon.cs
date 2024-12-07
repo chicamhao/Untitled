@@ -14,6 +14,8 @@ namespace Apps.Runtime.Combat
         public string HandBoneName => _handBoneName;
         [SerializeField] string _handBoneName = "Hand_R";
 
+        public Projectile ProjectilePrefab;
+
         [Header("Runtime")]
         public float Range => _range;
         [SerializeField] float _range = 2f;

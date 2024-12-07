@@ -28,9 +28,11 @@ namespace Apps.Runtime.SceneManager
 
         private void ServerOnConnectionEvent(NetworkManager manager, ConnectionEventData data)
         {
-            Debug.Log("server on connection event, event type: " + data.EventType);
             if (data.EventType != ConnectionEvent.ClientConnected)
+            {
+                Debug.LogError("Connected failed! Event: " + data.EventType);
                 return;
+            }
 
             if (!_clientStatuses.ContainsKey(data.ClientId))
             {

@@ -8,6 +8,7 @@ namespace Apps.Runtime.Combat
     public sealed class ServerFighter : NetworkBehaviour, IAction
     {
         [SerializeField] Weapon _weapon;
+        GameObject _handedWeapon;
 
         Animator _animator;
         ServerMover _mover;
@@ -61,31 +62,11 @@ namespace Apps.Runtime.Combat
             if (_durationCounter >= _weapon.Duration)
             {
                 _animator.ResetTrigger(s_stopAttackAnimation);
-                _animator.SetTrigger(s_attackAnimation); // this'll trigger Hit()
+                _animator.SetTrigger(s_attackAnimation);
 
                 _durationCounter = 0f;
             }
         }
-
-
-        #region animation event
-        public void Hit()
-        {
-            if (IsAttacking())
-            {
-                _receiver.Receive(_weapon.Damage);
-                if (_receiver.IsDead())
-                {
-                    Cancel();
-                }
-            }
-        }
-
-        public void Shot()
-        {
-            Hit();
-        }
-        #endregion
 
         /// <summary>
         /// move to the target and attack
@@ -105,9 +86,31 @@ namespace Apps.Runtime.Combat
             _receiver = null;
         }
 
-        public void ChangeWeapon(Weapon weapon)
+        public void ChangeWeapon(Weapon weapon, GameObject handedWeapon)
         {
             _weapon = weapon;
+            _handedWeapon = handedWeapon;
         }
+
+        #region animation event
+        public void Hit()
+        {
+            if (IsAttacking())
+            {
+                _receiver.Receive(_weapon.Damage);
+                if (_receiver.IsDead())
+                {
+                    Cancel();
+                }
+            }
+        }
+
+        public void Shoot()
+        {
+            var projectile = Instantiate(_weapon.ProjectilePrefab,
+                _handedWeapon.transform.position, _handedWeapon.transform.rotation);
+            projectile.Initialize(_receiver.GetComponent<CapsuleCollider>(), Hit);    
+        }
+        #endregion
     }
 }

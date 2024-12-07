@@ -8,16 +8,10 @@ namespace Apps.Runtime.SceneManagers
 	{
 		// TODO configurable
 		[SerializeField] string _nextScene;
-		private GameObject _player;
-
-		void Start()
-		{
-			_player = GameObject.FindWithTag("Player");
-		}
 
 		private void OnTriggerEnter(Collider other)
 		{
-			if (other == _player)
+			if (other.CompareTag("Player"))
 			{
 				StartCoroutine(TransitionAsync());
 			}

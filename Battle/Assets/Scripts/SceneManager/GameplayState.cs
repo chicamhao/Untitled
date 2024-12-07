@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Apps.Runtime.Combat;
 using Apps.Runtime.Movement;
 using Unity.Netcode;
@@ -17,15 +16,11 @@ namespace Apps.Runtime.SceneManager
 
         public override void OnNetworkSpawn()
         {
-            _clientStats.Add(NetworkManager.Singleton.LocalClientId, 0u);
-
             if (IsServer)
             {
                 NetworkManager.Singleton.OnConnectionEvent += ServerOnConnectionEvent;
                 SceneTransition.Instance.OnClientLoadedScene += ServerOnLoadedScene;
             }
-
-            GenerateStatsText();
         }
 
         private void ServerOnConnectionEvent(NetworkManager manager, ConnectionEventData data)
@@ -60,13 +55,11 @@ namespace Apps.Runtime.SceneManager
             var transform = _linePositions[_clientStats.Count - 1];
             connected.GetComponent<ServerMover>().Teleport(transform.position, transform.rotation);
 
-
             OnStatusChanged();
         }
 
         private void OnHPChanged(uint _, uint __)
         {
-            Debug.Log(_clientStats.Keys.First());
             foreach (var id in NetworkManager.Singleton.ConnectedClientsIds)
             {
                 if (!_clientStats.ContainsKey(id)) continue;
@@ -84,13 +77,11 @@ namespace Apps.Runtime.SceneManager
             {
                 GenerateStatsText();
             }
-            else
+
+            foreach (var pair in _clientStats)
             {
-                foreach (var pair in _clientStats)
-                {
-                    ClientOnStatusChangedRpc(pair.Key, pair.Value);
-                }
-            }
+                ClientOnStatusChangedRpc(pair.Key, pair.Value);
+            }            
         }
 
 
@@ -122,7 +113,7 @@ namespace Apps.Runtime.SceneManager
         }
 
 
-        // TODO where should I call this?s
+        // TODO where should this is called?
         public void Dispose()
         {
             NetworkManager.Singleton.OnConnectionEvent -= ServerOnConnectionEvent;

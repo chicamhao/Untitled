@@ -16,3 +16,6 @@ MonoBehaviour:
   _weaponPrefab: {fileID: 1462776457217096863, guid: 9c3e2ca5d662142d99be1c4cfe41e7e3,
     type: 3}
   _handBoneName: Hand_R
+  _range: 2
+  _damage: 80
+  _duration: 1.5

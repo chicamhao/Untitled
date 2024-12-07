@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using Unity.Netcode;
 
 namespace Apps.Runtime.Core
 {
@@ -7,9 +7,14 @@ namespace Apps.Runtime.Core
         void Cancel();
     }
 
-    public sealed class ServerActionScheduler : MonoBehaviour
+    public sealed class ServerActionScheduler : NetworkBehaviour
     {
         IAction _currentAction;
+
+        public override void OnNetworkSpawn()
+        {
+            enabled = IsServer;
+        }
 
         /// <summary>
         /// allow overriding of actions 

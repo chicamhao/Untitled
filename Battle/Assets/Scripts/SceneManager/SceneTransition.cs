@@ -34,6 +34,7 @@ namespace Apps.Runtime.SceneManager
 
         private void Awake()
         {
+            // TODO DI
             Instance = this;
             DontDestroyOnLoad(this);
 

@@ -16,6 +16,8 @@ MonoBehaviour:
   _weaponPrefab: {fileID: 1462776457217096863, guid: c86adb484013742e1b27209e29f00044,
     type: 3}
   _handBoneName: Hand_L
+  ProjectilePrefab: {fileID: 4322651697146184607, guid: 22c5eb6e126594cfe8a6ca6ab1fe016f,
+    type: 3}
   _range: 10
-  _damage: 30
+  _damage: 70
   _duration: 1.5
