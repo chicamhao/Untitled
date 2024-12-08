@@ -12,6 +12,9 @@ namespace Apps.Runtime.Combat
         public IStatus Status => _status;
         Status _status;
 
+        public CapsuleCollider Collider => _collider;
+        CapsuleCollider _collider;
+
         private static readonly int s_dieAnimation = Animator.StringToHash("_die");
 
         public override void OnNetworkSpawn()
@@ -22,6 +25,7 @@ namespace Apps.Runtime.Combat
         public void Start()
         {
             _status = GetComponent<Status>();
+            _collider = GetComponent<CapsuleCollider>();
         }
 
         public void Receive(uint damage)
@@ -34,7 +38,7 @@ namespace Apps.Runtime.Combat
                 GetComponent<ServerActionScheduler>().StartAction(null);
                 GetComponent<NavMeshAgent>().enabled = false;
                 GetComponent<ServerFighter>().enabled = false;
-                GetComponent<Collider>().enabled = false;
+                _collider.enabled = false;
 
                 // TODO resolve round reference
                 if (TryGetComponent<PlayerController>(out var p))

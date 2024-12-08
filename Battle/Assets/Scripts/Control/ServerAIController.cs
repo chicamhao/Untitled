@@ -8,13 +8,9 @@ namespace Apps.Runtime.Control
 {
     public sealed class ServerAIController : NetworkBehaviour
     {
-        enum Category
-        {
-            Guardian
-        }
-
         [SerializeField] PatrolPath _partrolPath;
-        [SerializeField] Category _category;
+        [SerializeField] float _observantRange = 5f;
+        [SerializeField] float _suspicionTime = 4f;
 
         ServerFighter _fighter;
         ServerReceiver[] _receivers;
@@ -83,7 +79,7 @@ namespace Apps.Runtime.Control
 
         private bool TrySuspect()
         {
-            if (_timeSinceLastSawPlayer < Configurations.SuspicionTime)
+            if (_timeSinceLastSawPlayer < _suspicionTime)
             {
                 _actionScheduler.StartAction(null);
                 return true;
@@ -93,13 +89,8 @@ namespace Apps.Runtime.Control
 
         private void Guard()
         {
-            if (_category != Category.Guardian) return;
-
-            if (_category == Category.Guardian && _partrolPath == null)
-                throw new System.InvalidOperationException();
-         
             var wayPoint = _partrolPath.GetWayPoint(transform.position);
-            if (wayPoint.AtWayPoint && _timeAtWayPoint >= Configurations.ObservantRange)
+            if (wayPoint.AtWayPoint && _timeAtWayPoint >= _observantRange)
             {
                 _timeAtWayPoint = 0f;
                 _currentWayPoint = wayPoint.NextWayPoint;
@@ -112,12 +103,12 @@ namespace Apps.Runtime.Control
         private bool InObservantRange(ServerReceiver receiver)
         {
             var distance = Vector3.Distance(gameObject.transform.position, receiver.transform.position);
-            return distance <= Configurations.ObservantRange;
+            return distance <= _observantRange;
         }
 
         private void OnDrawGizmosSelected()
         {
-            Gizmos.DrawWireSphere(transform.position, Configurations.ObservantRange);
+            Gizmos.DrawWireSphere(transform.position, _observantRange);
         }
     }
 }

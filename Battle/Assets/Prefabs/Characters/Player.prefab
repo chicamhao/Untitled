@@ -195,6 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rootTransform: {fileID: 7898163266518917460}
+  _initialWeapon: {fileID: 0}
 --- !u!114 &8047419101297761639
 MonoBehaviour:
   m_ObjectHideFlags: 0

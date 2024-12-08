@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c7130f93f87a4cedb42841d4773187e, type: 3}
-  m_Name: Bow
+  m_Name: Bow Red
   m_EditorClassIdentifier: 
   _animatorOnverride: {fileID: 22100000, guid: 84691e60e83524845b4c74b7d5bf9b0e, type: 2}
   _weaponPrefab: {fileID: 1462776457217096863, guid: c86adb484013742e1b27209e29f00044,
     type: 3}
   _handBoneName: Hand_L
-  ProjectilePrefab: {fileID: 4322651697146184607, guid: 22c5eb6e126594cfe8a6ca6ab1fe016f,
+  ProjectilePrefab: {fileID: 4322651697146184607, guid: 4ada09d895fe1442a82a5790e1d96a2b,
     type: 3}
   _range: 10
   _damage: 70

@@ -8,20 +8,20 @@ namespace Apps.Runtime.Combat
 	{
         [SerializeField] float _speed = 10f;
         CapsuleCollider _target;
-        Action _hitAction;
+        Action<Projectile> _hitAction;
 
-        public void Initialize(CapsuleCollider target, Action hitAction)
+        public void Initialize(CapsuleCollider target, Transform trans, Action<Projectile> hitAction)
         {
             _target = target;
             _hitAction = hitAction;
+            transform.SetPositionAndRotation(trans.position, trans.rotation);
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (IsServer && _target != null)
-            {
-                _hitAction?.Invoke();
-            }            
+            _hitAction?.Invoke(this);
+            _target = null;
+            _hitAction = null;
         }
 
         public void Update()
@@ -36,12 +36,6 @@ namespace Apps.Runtime.Combat
         private Vector3 GetLookAtPosition()
         {
             return _target.transform.position + Vector3.up * _target.height / 2;
-        }
-
-        public void Cancel()
-        {
-            _target = null;
-            _hitAction = null;
         }
     }
 }
