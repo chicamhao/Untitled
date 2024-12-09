@@ -7,13 +7,15 @@ A click-based multiplayer, action role-playing game prototype.
   - Combat mechanic with real-time multiplayer synchronization.
   - Weapon changes.
   - AI: Guardian, Archer.
-
-https://github.com/user-attachments/assets/2c07fd67-5ba8-4a54-a152-74de88345f2c
-
-
-     
+* Demo: https://www.youtube.com/watch?v=xwjSWYpZsnY     
 * Planed:
   - UI creation.
   - Audio intergration.
   - Visual improvement.
   - Match-making.
+
+# How to confirm
+* For combat mechanics, enter sandbox.scene directly.
+* For multiplay mode:
+  - Activate virtual players by navigating to Window > Multiplayer Play Mode. 
+  - Enter local lobby from boot.scene and continue as demo video.
