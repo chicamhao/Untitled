@@ -28,9 +28,6 @@ namespace Apps.Runtime.Control
         {
             enabled = IsServer;
 
-            // TODO configurable
-            GetComponent<Status>().Initialize(200); 
-
             // TODO cache references
             var players = GameObject.FindGameObjectsWithTag("Player");
             _receivers = new ServerReceiver[players.Length];
@@ -38,6 +35,7 @@ namespace Apps.Runtime.Control
             {
                 _receivers[i] = players[i].GetComponent<ServerReceiver>();
             }
+
         }
 
         private void Start()
@@ -47,6 +45,9 @@ namespace Apps.Runtime.Control
             _actionScheduler = GetComponent<ServerActionScheduler>();
 
             _currentWayPoint = transform.position;
+
+            // TODO configurable
+            GetComponent<Status>().Initialize(500);
         }
 
         void Update()
@@ -65,7 +66,7 @@ namespace Apps.Runtime.Control
 
         private bool TryAttack(ServerReceiver receiver)
         {
-            if (InObservantRange(receiver))
+            if (!receiver.IsDead() && InObservantRange(receiver))
             {
                 _timeSinceLastSawPlayer = 0f;
                 if (_actionScheduler.StartAction(_fighter))
@@ -89,6 +90,8 @@ namespace Apps.Runtime.Control
 
         private void Guard()
         {
+            if (_partrolPath == null) return;
+            
             var wayPoint = _partrolPath.GetWayPoint(transform.position);
             if (wayPoint.AtWayPoint && _timeAtWayPoint >= _observantRange)
             {

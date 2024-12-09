@@ -1,23 +1,16 @@
-using Apps.Runtime.Control;
-using Apps.Runtime.Movement;
+using Apps.Runtime.Combat;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Apps.Sandbox
 {
-    public sealed class DebugSpawner : MonoBehaviour, IFollowCamera
+    public sealed class DebugSpawner : MonoBehaviour
     {
         public void Start()
         {
             NetworkManager.Singleton.StartHost();
             var player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
-            var control = player.GetComponent<PlayerController>();
-            control.SetFollowCamera(this);
-        }
-
-        public void Follow(Transform player)
-        {
-            transform.position = player.position;
+            player.GetComponent<Status>().Initialize(1000);
         }
     }
 }

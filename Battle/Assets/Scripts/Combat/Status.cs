@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Unity.Netcode;
+using System;
 
 namespace Apps.Runtime.Combat
 {
@@ -20,7 +21,7 @@ namespace Apps.Runtime.Combat
 
         public void Subtract(uint hp)
         {
-            Health.Value = (uint)Mathf.Max(Health.Value - hp, 0f);
+            Health.Value = (uint)Math.Max((int)Health.Value - hp, 0);
         }
     }
 }

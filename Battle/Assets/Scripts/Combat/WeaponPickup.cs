@@ -7,7 +7,7 @@ namespace Apps.Runtime.Combat
 	{
 		public Weapon Weapon => _weapon;
 		[SerializeField] Weapon _weapon;
-        [SerializeField] float _rotationAngel = 2f;
+        [SerializeField] float _rotationAngel = 0.5f;
 
         public void Update()
         {

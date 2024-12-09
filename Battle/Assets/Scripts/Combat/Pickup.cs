@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Apps.Runtime.Combat
 {
-    public sealed class ServerPickup : NetworkBehaviour
+    public sealed class Pickup : NetworkBehaviour
 	{
         [SerializeField] Transform _rootTransform;
         [SerializeField] Weapon _initialWeapon;
@@ -15,25 +15,16 @@ namespace Apps.Runtime.Combat
         Weapon _weapon;
         GameObject _handedWeapon;
 
-        public override void OnNetworkSpawn()
-        {
-            enabled = IsServer;
-        }
-
         private void Start()
         {
             _fighter = GetComponent<ServerFighter>();
             _animator = GetComponent<Animator>();
-
-            if (_initialWeapon != null)
-            {
-                HandWeapon(_initialWeapon);
-            }
+            HandWeapon(_initialWeapon);            
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (IsServer && other.CompareTag("Pickup"))
+            if (other.CompareTag("Pickup"))
             {
                 HandWeapon(other.GetComponent<WeaponPickup>().Weapon);            
                 other.gameObject.SetActive(false); // TODO pool
@@ -44,18 +35,25 @@ namespace Apps.Runtime.Combat
         {
             if (_handedWeapon != null)
             {
-                _handedWeapon.SetActive(false); // TODO pool
+                Destroy(_handedWeapon); // TODO pool
             }
 
             _weapon = weapon;
             var handTransform = AlgorithmHelper.RecursiveFindChild(_rootTransform, _weapon.HandBoneName);
-            _handedWeapon = Instantiate(_weapon.WeaponPrefab, handTransform);
+
+            if (_weapon.WeaponPrefab != null)
+            {
+                _handedWeapon = Instantiate(_weapon.WeaponPrefab, handTransform);
+            }
+
+            // change attack animation
+            if (_weapon.AnimatorOnverride != null)
+            {
+                _animator.runtimeAnimatorController = _weapon.AnimatorOnverride;
+            }
 
             // change weapon stats
             _fighter.ChangeWeapon(_weapon, handTransform);
-
-            // change attack animation
-            _animator.runtimeAnimatorController = _weapon.AnimatorOnverride;
         }
     }
 }

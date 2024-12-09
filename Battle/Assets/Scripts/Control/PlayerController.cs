@@ -1,5 +1,4 @@
 using Apps.Runtime.Combat;
-using Apps.Runtime.Movement;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,9 +10,6 @@ namespace Apps.Runtime.Control
     public sealed class PlayerController : NetworkBehaviour
     {
         [SerializeField] ServerPlayerController _serverPlayerController;
-
-        IFollowCamera _followCamera;
-
         bool _interactRequest;
 
         private void Start()
@@ -48,22 +44,13 @@ namespace Apps.Runtime.Control
                     }
 
                     // movement
-                    else if (hit.transform.TryGetComponent<Terrain>(out var _))
+                    else if (hit.transform.TryGetComponent<Terrain>(out var _)
+                        || hit.transform.TryGetComponent<WeaponPickup>(out var _))
                     {
                         _serverPlayerController.MoveRpc(hit.point);
                     }
                 }
             }
-
-            if (IsLocalPlayer && _followCamera != null)
-            {
-                _followCamera.Follow(transform);
-            }
-        }
-
-        public void SetFollowCamera(IFollowCamera camera)
-        {
-            _followCamera = camera;
         }
 
         public void Teleport(Vector3 position, Quaternion rotation)

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Apps.Runtime.Core;
+﻿using Apps.Runtime.Core;
 using Apps.Runtime.Movement;
 using Unity.Netcode;
 using UnityEngine;
@@ -16,11 +14,11 @@ namespace Apps.Runtime.Combat
         ServerMover _mover;
         ServerReceiver _receiver;
 
-        private readonly static int s_attackAnimation = Animator.StringToHash("_attack");
-        private readonly static int s_stopAttackAnimation = Animator.StringToHash("_stopAttack");
+        ProjectilePool _projectilePool;
+        readonly static int s_attackAnimation = Animator.StringToHash("_attack");
+        readonly static int s_stopAttackAnimation = Animator.StringToHash("_stopAttack");
 
         float _durationCounter;
-        readonly List<Projectile> _projectilePool = new();
 
         public override void OnNetworkSpawn()
         {
@@ -61,7 +59,7 @@ namespace Apps.Runtime.Combat
 
         private void AttackBehaviour()
         {
-            transform.LookAt(_receiver.transform);      
+            transform.LookAt(_receiver.transform);
 
             if (_durationCounter >= _weapon.Duration)
             {
@@ -81,7 +79,7 @@ namespace Apps.Runtime.Combat
             _receiver = receiver;
         }
 
-        private bool IsAttacking() => _receiver != null;
+        private bool IsAttacking() => _receiver != null && !_receiver.IsDead();
 
         public void Cancel()
         {
@@ -100,7 +98,7 @@ namespace Apps.Runtime.Combat
         public void Hit()
         {
             if (!IsAttacking()) return;
-            
+
             _receiver.Receive(_weapon.Damage);
             if (_receiver.IsDead())
             {
@@ -112,26 +110,16 @@ namespace Apps.Runtime.Combat
         {
             if (!IsAttacking()) return;
 
-            Projectile projectile; 
-            if (_projectilePool.Any())
-            {
-                projectile = _projectilePool.First();
-                _projectilePool.RemoveAt(0);
-                projectile.gameObject.SetActive(true);
-            }
-            else
-            {
-                projectile = Instantiate(_weapon.ProjectilePrefab);
-            }
+            _projectilePool ??= new ProjectilePool();
+            var projectile = _projectilePool.Spawn(_weapon.ProjectilePrefab);
             projectile.Initialize(
                 _receiver.Collider, _handTransform.transform, ProjectileHitCallback);
         }
 
         private void ProjectileHitCallback(Projectile projectile)
         {
-            _projectilePool.Add(projectile);
-            projectile.gameObject.SetActive(false);
             Hit();
+            _projectilePool.Release(projectile);
         }
         #endregion
     }

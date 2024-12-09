@@ -1,4 +1,5 @@
 ﻿using Apps.Runtime.Core;
+using Unity.Cinemachine;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Apps.Runtime.Movement
     public sealed class ServerMover : NetworkBehaviour, IAction
     {
         [SerializeField] NetworkTransform _networkTransform;
+        [SerializeField] CinemachineCamera _camera;
         [SerializeField] NavMeshAgent _navMeshAgent;
         [SerializeField] Animator _animator;
 
@@ -17,7 +19,11 @@ namespace Apps.Runtime.Movement
         public override void OnNetworkSpawn()
         {
             enabled = IsServer;
-            _navMeshAgent.enabled = IsServer;          
+            _navMeshAgent.enabled = IsServer;
+            if (_camera != null)
+            {
+                _camera.enabled = IsLocalPlayer;
+            }
         }
 
         private void Update()
