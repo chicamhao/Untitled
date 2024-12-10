@@ -19,7 +19,6 @@ namespace Apps.Runtime.Movement
         public override void OnNetworkSpawn()
         {
             enabled = IsServer;
-            _navMeshAgent.enabled = IsServer;
             if (_camera != null)
             {
                 _camera.enabled = IsLocalPlayer;
@@ -46,6 +45,9 @@ namespace Apps.Runtime.Movement
         public void Teleport(Vector3 position, Quaternion rotation)
         {
             _networkTransform.Teleport(position, rotation, Vector3.one);
+
+            // turn off in the prefab to avoid no NavMesh when spawned
+            _navMeshAgent.enabled = true;
             _navMeshAgent.Warp(position);
             _navMeshAgent.isStopped = true;
         }

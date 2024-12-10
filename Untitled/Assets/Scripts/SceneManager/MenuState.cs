@@ -2,7 +2,6 @@ using System.Text.RegularExpressions;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Apps.Runtime.SceneManager
 {
@@ -11,9 +10,6 @@ namespace Apps.Runtime.SceneManager
         // TODO input field
         [SerializeField] string _ip = "127.0.0.1​";
         [SerializeField] ushort _port = 7777;
-
-        [SerializeField] Button _startGameButton;
-        [SerializeField] Button _joinGameButton;
 
         private void StartGame()
         {
