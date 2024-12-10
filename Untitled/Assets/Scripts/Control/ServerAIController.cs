@@ -36,6 +36,8 @@ namespace Apps.Runtime.Control
                 _receivers[i] = players[i].GetComponent<ServerReceiver>();
             }
 
+            // TODO configurable
+            GetComponent<Status>().Initialize(500);
         }
 
         private void Start()
@@ -45,9 +47,6 @@ namespace Apps.Runtime.Control
             _actionScheduler = GetComponent<ServerActionScheduler>();
 
             _currentWayPoint = transform.position;
-
-            // TODO configurable
-            GetComponent<Status>().Initialize(500);
         }
 
         void Update()
