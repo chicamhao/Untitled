@@ -1,5 +1,4 @@
-﻿using System;
-using Apps.Runtime.Control;
+﻿using Apps.Runtime.Control;
 using Apps.Runtime.Core;
 using Unity.Netcode;
 using UnityEngine;
@@ -9,7 +8,7 @@ namespace Apps.Runtime.Combat
 {
     public sealed class ServerReceiver : NetworkBehaviour
     {
-        public IStatus Status => _status;
+        public Status Status => _status;
         Status _status;
 
         public CapsuleCollider Collider => _collider;

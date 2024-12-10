@@ -1,15 +1,9 @@
-﻿using UnityEngine;
-using Unity.Netcode;
+﻿using Unity.Netcode;
 using System;
 
 namespace Apps.Runtime.Combat
 {
-    public interface IStatus
-    {
-        public NetworkVariable<uint> Health { get; }
-    }
-
-    public sealed class Status : NetworkBehaviour, IStatus
+    public sealed class Status : NetworkBehaviour
     {
         public NetworkVariable<uint> Health { get; private set; } = new();
         public bool IsDead => Health.Value == 0;

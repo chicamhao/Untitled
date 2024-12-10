@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
+using Apps.Runtime.Control;
 using Apps.Runtime.Movement;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace Apps.Runtime.SceneManager
@@ -29,11 +28,8 @@ namespace Apps.Runtime.SceneManager
         private void ServerOnConnectionEvent(NetworkManager manager, ConnectionEventData data)
         {
             if (data.EventType != ConnectionEvent.ClientConnected)
-            {
-                Debug.LogError("Connected failed! Event: " + data.EventType);
                 return;
-            }
-
+            
             if (!_clientStatuses.ContainsKey(data.ClientId))
             {
                 _clientStatuses.Add(data.ClientId, false);
@@ -69,11 +65,6 @@ namespace Apps.Runtime.SceneManager
             foreach (var status in _clientStatuses)
             {
                 ClientNoticeReadyStatusRpc(status.Key, status.Value);
-            }
-
-            if (IsAllPlayersReady())
-            {
-                SwitchGameplayScene();
             }
         }
 
@@ -124,7 +115,7 @@ namespace Apps.Runtime.SceneManager
                     OnReadyButtonClicked();
                 }
             }
-            else if (NetworkManager.Singleton.IsHost)
+            else if (NetworkManager.Singleton.IsHost && IsAllPlayersReady())
             {
                 if (GUILayout.Button("Play"))
                 {
