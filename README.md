@@ -5,10 +5,17 @@ A click-based multiplayer, action role-playing game prototype.
    
 # How to confirm
 * For combat mechanics, enter sandbox.scene directly.
+  
+![Screenshot 2024-12-10 at 17 46 25](https://github.com/user-attachments/assets/75e700f1-e92c-4c4d-99bb-ed7a27b768e4)
+
+
 * For multiplay mode:
   - Activate virtual players by navigating to Window > Multiplayer Play Mode. 
   - Enter the local lobby from boot.scene and continue as the demo video.
     
+ ![Screenshot 2024-12-10 at 18 17 34](https://github.com/user-attachments/assets/133a7746-6849-4c3f-bb4b-b2ac8e5372d6)
+
+
 # Progress
 * Available:
   - Local lobby.
