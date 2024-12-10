@@ -23,19 +23,17 @@ A click-based multiplayer, action role-playing game prototype.
   - Weapon changes.
   - AI: Guardian, Archer.
 * Planed:
-  - Visual improvement. <-
-     - water flows, weather changes, a nice custom pipeline 15.12.
-     - some cool combat effects 17.12.
-  - UI creation 20.12.
+  - Visual improvement 16.12. <-
+     - water flows, skybox, a nice custom pipeline.
+     - some cool combat effects.
+  - UI creation 18.12.
     - menu.
     - combat.
-  - Audio intergration 22.12.
+  - Audio intergration 20.12.
   - Match-making, voice, chat intergration 30.12.
   - Level design, scene manager improvement.
   - Save/load, asset manager creation.
   - Refactor, optimization, TODO & bugs resolution. <-
  # License
  - The source code is free to use, but the polygon art (by Synty) are for educational purposes only. Please read the readme included with assets folder (if any).
- - Source references: 
-   - Gamedev's Udemy courses, Ben Tristem & Rick Davidson.
-   - Unity netcode sample projects.
+ - Game design referenced from Gamedev's Udemy courses of Ben Tristem & Rick Davidson.
