@@ -248,7 +248,7 @@ PrefabInstance:
         type: 3}
       propertyPath: 'NetworkConfig.Prefabs.NetworkPrefabsLists.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 74b4e37563c7d4e41ac72062a7598158,
+      objectReference: {fileID: 11400000, guid: f70da2eb51f6d43df9aac1a3c29116ee,
         type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

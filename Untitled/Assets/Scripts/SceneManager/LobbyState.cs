@@ -70,9 +70,6 @@ namespace Apps.Runtime.SceneManager
 
         private bool IsAllPlayersReady()
         {
-            // at least 2 players to start multiplay mode
-            if (_clientStatuses.Count < 2) return false;
-
             foreach (var status in _clientStatuses)
             {
                 // some clients are still loading into the lobby scene
