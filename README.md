@@ -27,3 +27,8 @@ A click-based multiplayer, action role-playing game prototype.
   - Level design, scene manager improvement.
   - Save/load, asset manager creation.
   - Refactor, optimization, TODO & bugs resolution. <-
+ # License
+ - The source code is free to use, but the polygon art (by Synty) are for educational purposes only. Please read the readme included with assets folder (if any).
+ - Source references: 
+   - Gamedev's Udemy courses, Ben Tristem & Rick Davidson.
+   - Unity netcode sample projects.
