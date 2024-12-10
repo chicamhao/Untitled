@@ -16,7 +16,14 @@ A click-based multiplayer, action role-playing game prototype.
   - Weapon changes.
   - AI: Guardian, Archer.
 * Planed:
-  - UI creation.
-  - Audio intergration.
-  - Visual improvement.
-  - Match-making.
+  - Visual improvement. <-
+     - water flows, weather changes, a nice custom pipeline 15.12.
+     - some cool combat effects 17.12.
+  - UI creation 20.12.
+    - menu.
+    - combat.
+  - Audio intergration 22.12.
+  - Match-making, voice, chat intergration 30.12.
+  - Level design, scene manager improvement.
+  - Save/load, asset manager creation.
+  - Refactor, optimization, TODO & bugs resolution. <-
