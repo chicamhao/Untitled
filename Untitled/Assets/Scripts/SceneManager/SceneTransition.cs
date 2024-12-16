@@ -1,3 +1,4 @@
+using Apps.Runtime.Core;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,8 +18,6 @@ namespace Apps.Runtime.SceneManager
 
         // TODO DI
         public static SceneTransition Instance { get; private set; }
-
-        [SerializeField] NetworkManager _networkManager;
 
         public delegate void SceneChangedDelegate(SceneState state);
         public event SceneChangedDelegate OnSceneChanged;

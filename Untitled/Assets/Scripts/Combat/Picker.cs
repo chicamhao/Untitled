@@ -1,11 +1,12 @@
-﻿using Apps.Runtime.Core;
+﻿using Apps.Utils;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Apps.Runtime.Combat
 {
-    public sealed class Pickup : NetworkBehaviour
-	{
+    // TODO template implement for non-weapon cases
+    public sealed class Picker : NetworkBehaviour
+    {
         [SerializeField] Transform _rootTransform;
         [SerializeField] Weapon _initialWeapon;
 
@@ -19,14 +20,14 @@ namespace Apps.Runtime.Combat
         {
             _fighter = GetComponent<ServerFighter>();
             _animator = GetComponent<Animator>();
-            HandWeapon(_initialWeapon);            
+            HandWeapon(_initialWeapon);
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Pickup"))
             {
-                HandWeapon(other.GetComponent<WeaponPickup>().Weapon);            
+                HandWeapon(other.GetComponent<WeaponPickup>().Weapon);
                 other.gameObject.SetActive(false); // TODO pool
             }
         }
@@ -39,7 +40,7 @@ namespace Apps.Runtime.Combat
             }
 
             _weapon = weapon;
-            var handTransform = AlgorithmHelper.RecursiveFindChild(_rootTransform, _weapon.HandBoneName);
+            var handTransform = AlgorithmUtils.BacktrackFindChild(_rootTransform, _weapon.HandBoneName);
 
             if (_weapon.WeaponPrefab != null)
             {
@@ -57,4 +58,3 @@ namespace Apps.Runtime.Combat
         }
     }
 }
-

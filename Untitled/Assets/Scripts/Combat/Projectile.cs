@@ -1,75 +1,62 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
 using Unity.Netcode;
-using System;
-using Unity.Netcode.Components;
+using UnityEngine;
 
 namespace Apps.Runtime.Combat
 {
     public sealed class Projectile : NetworkBehaviour
     {
         [SerializeField] float _speed = 20f;
+        [SerializeField] float _range = 30f;
 
-        readonly NetworkVariable<bool> _activated = new(true);
-        NetworkTransform _transform;
+        Vector3 _start;
         CapsuleCollider _target;
-        Action<Projectile> _hitAction;
+        Action _hitAction;
 
-        public override void OnNetworkSpawn()
+        public void Initialize(CapsuleCollider target, Action hitAction)
         {
-            _transform = GetComponent<NetworkTransform>();
-            if (IsClient)
-            {
-                _activated.OnValueChanged += OnActivatedChanged;
-            }
-        }
-
-        public override void OnNetworkDespawn()
-        {
-            base.OnNetworkDespawn();
-            if (IsClient)
-            {
-                _activated.OnValueChanged -= OnActivatedChanged;
-            }
-        }
-
-        private void OnActivatedChanged(bool _, bool newValue)
-        {
-            gameObject.SetActive(newValue);
-        }
-
-        public void Initialize(CapsuleCollider target, Transform trans, Action<Projectile> hitAction)
-        {
-            if (!IsServer) return;
-
             _target = target;
+            _start = transform.position;
+            transform.LookAt(_target.transform.position + Vector3.up * _target.height / 2);
             _hitAction = hitAction;
-
-            _transform.Teleport(trans.position, Quaternion.identity, Vector3.one);
-            _activated.Value = true;            
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!IsServer) return;
+            if (IsServer)
+            {
+                Hit(other.tag);
+            }
+        }
 
-            _hitAction?.Invoke(this);
-            _target = null;
-            _hitAction = null;
-            _activated.Value = false;
+        private void Hit(string tag)
+        {
+            if (_target && !_target.CompareTag(tag)) return;
+            NetworkObject.Despawn(true);
+            _hitAction?.Invoke();
         }
 
         public void Update()
         {
             if (_target)
             {
-                transform.LookAt(GetLookAtPosition());
-                transform.Translate(_speed * Time.deltaTime * Vector3.forward);
+                if (Vector3.Distance(_start, transform.position) > _range)
+                {
+                    NetworkObject.Despawn(true);
+                }
+                else
+                {
+                    transform.Translate(_speed * Time.deltaTime * Vector3.forward);
+                }
             }
         }
 
-        private Vector3 GetLookAtPosition()
+        public override void OnNetworkDespawn()
         {
-            return _target.transform.position + Vector3.up * _target.height / 2;
+            _target = null;
+            _hitAction = null;
+            transform.position = _start;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Apps.Runtime.SceneManager
         private string _statusText;
 
         // key: id, value: HP
-        private readonly Dictionary<ulong, uint> _clientStats = new(); 
+        private readonly Dictionary<ulong, uint> _clientStats = new();
         [SerializeField] List<Transform> _linePositions;
 
         public override void OnNetworkSpawn()
@@ -81,7 +81,7 @@ namespace Apps.Runtime.SceneManager
             foreach (var pair in _clientStats)
             {
                 ClientOnStatusChangedRpc(pair.Key, pair.Value);
-            }            
+            }
         }
 
 

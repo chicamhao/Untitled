@@ -77,7 +77,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.2
+  m_Time: 0.1
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -228,6 +228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 20
+  _range: 30
 --- !u!114 &5834691701926837896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +280,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.05, y: 0.05, z: 0.44}
-  m_Center: {x: 0, y: 0, z: 0.45}
+  m_Center: {x: 0, y: 0, z: 0.25}
 --- !u!1001 &6697738864327444318
 PrefabInstance:
   m_ObjectHideFlags: 0

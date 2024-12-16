@@ -2,6 +2,7 @@
 using Apps.Runtime.Movement;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace Apps.Runtime.Combat
 {
@@ -14,7 +15,7 @@ namespace Apps.Runtime.Combat
         ServerMover _mover;
         ServerReceiver _receiver;
 
-        ProjectilePool _projectilePool;
+        IObjectPool<Projectile> _projectilePool;
         readonly static int s_attackAnimation = Animator.StringToHash("_attack");
         readonly static int s_stopAttackAnimation = Animator.StringToHash("_stopAttack");
 
@@ -110,16 +111,17 @@ namespace Apps.Runtime.Combat
         {
             if (!IsAttacking()) return;
 
-            _projectilePool ??= new ProjectilePool();
-            var projectile = _projectilePool.Spawn(_weapon.ProjectilePrefab);
-            projectile.Initialize(
-                _receiver.Collider, _handTransform.transform, ProjectileHitCallback);
+            var p = NetworkObjectPool.Singleton.GetNetworkObject(_weapon.ProjectilePrefab, _handTransform.position, _handTransform.rotation);
+            p.GetComponent<Projectile>().Initialize(_receiver.Collider, ProjectileHitCallback);
+            if (!p.IsSpawned)
+            {
+                p.Spawn(true);
+            }
         }
 
-        private void ProjectileHitCallback(Projectile projectile)
+        private void ProjectileHitCallback()
         {
             Hit();
-            _projectilePool.Release(projectile);
         }
         #endregion
     }

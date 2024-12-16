@@ -7,7 +7,7 @@ namespace Apps.Runtime.Control
     /// the path which are attached to the environment(map), not the guardian ​themself.
     /// </summary>
 	public sealed class PatrolPath : MonoBehaviour
-	{
+    {
         private void OnDrawGizmos()
         {
             for (var i = 0; i < transform.childCount; i++)
@@ -52,6 +52,5 @@ namespace Apps.Runtime.Control
                 NextWayPoint = nextWayPoint;
             }
         }
-	}
+    }
 }
-

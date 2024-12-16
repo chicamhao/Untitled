@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-namespace Apps.Runtime.Core
+namespace Apps.Utils
 {
-	public static class AlgorithmHelper
+	public static class AlgorithmUtils
 	{
         // TODO use for temporary purposes, since this backtracking approach's expensive
-        public static Transform RecursiveFindChild(Transform parent, string childName)
+        public static Transform BacktrackFindChild(Transform parent, string childName)
         {
             foreach (Transform child in parent)
             {
@@ -15,7 +15,7 @@ namespace Apps.Runtime.Core
                 }
                 else
                 {
-                    Transform found = RecursiveFindChild(child, childName);
+                    Transform found = BacktrackFindChild(child, childName);
                     if (found != null)
                     {
                         return found;

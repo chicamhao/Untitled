@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Apps.Runtime.Control;
 using Apps.Runtime.Movement;
 using Unity.Netcode;
 using UnityEngine;
@@ -11,7 +10,7 @@ namespace Apps.Runtime.SceneManager
         private string _statusText;
         private readonly Dictionary<ulong, bool> _clientStatuses = new();
         [SerializeField] List<Transform> _linePositions;
-        
+
         public override void OnNetworkSpawn()
         {
             _clientStatuses.Add(NetworkManager.Singleton.LocalClientId, false);
@@ -29,7 +28,7 @@ namespace Apps.Runtime.SceneManager
         {
             if (data.EventType != ConnectionEvent.ClientConnected)
                 return;
-            
+
             if (!_clientStatuses.ContainsKey(data.ClientId))
             {
                 _clientStatuses.Add(data.ClientId, false);

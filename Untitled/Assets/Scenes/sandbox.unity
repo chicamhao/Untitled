@@ -182,6 +182,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8259233609908044267, guid: d998e42e5e3fd4676b0277d1670d9b46,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2405133251
+      objectReference: {fileID: 0}
+    - target: {fileID: 8259233609908044267, guid: d998e42e5e3fd4676b0277d1670d9b46,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 3079326677
+      objectReference: {fileID: 0}
     - target: {fileID: 8624976846090583828, guid: d998e42e5e3fd4676b0277d1670d9b46,
         type: 3}
       propertyPath: 'NetworkConfig.Prefabs.NetworkPrefabsLists.Array.data[0]'
@@ -1427,6 +1437,7 @@ GameObject:
   - component: {fileID: 1988306011}
   - component: {fileID: 1988306013}
   - component: {fileID: 1988306012}
+  - component: {fileID: 1988306014}
   m_Layer: 0
   m_Name: FollowCamera
   m_TagString: Untagged
@@ -1483,6 +1494,25 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &1988306014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988306010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32907ac45a1e440d19a55cce6d64058b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pooledPrefabsList:
+  - Prefab: {fileID: 7857476121217744041, guid: 22c5eb6e126594cfe8a6ca6ab1fe016f,
+      type: 3}
+    PrewarmCount: 3
+  - Prefab: {fileID: 7857476121217744041, guid: 4ada09d895fe1442a82a5790e1d96a2b,
+      type: 3}
+    PrewarmCount: 3
 --- !u!4 &1991106636 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1404021001610878367, guid: f34dbb84c759e4085a5d8eae3d2d891f,
@@ -1685,5 +1715,5 @@ SceneRoots:
   - {fileID: 2086262247}
   - {fileID: 1069051993}
   - {fileID: 23974363}
-  - {fileID: 6057416291723767441}
   - {fileID: 1802494146}
+  - {fileID: 6057416291723767441}

@@ -2708,6 +2708,7 @@ GameObject:
   - component: {fileID: 1679375107}
   - component: {fileID: 1679375105}
   - component: {fileID: 1679375106}
+  - component: {fileID: 1679375108}
   m_Layer: 0
   m_Name: GameplayState
   m_TagString: Untagged
@@ -2772,6 +2773,25 @@ Transform:
   - {fileID: 181994947}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1679375108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679375104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32907ac45a1e440d19a55cce6d64058b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pooledPrefabsList:
+  - Prefab: {fileID: 7857476121217744041, guid: 4ada09d895fe1442a82a5790e1d96a2b,
+      type: 3}
+    PrewarmCount: 3
+  - Prefab: {fileID: 7857476121217744041, guid: 22c5eb6e126594cfe8a6ca6ab1fe016f,
+      type: 3}
+    PrewarmCount: 3
 --- !u!1001 &1755155133
 PrefabInstance:
   m_ObjectHideFlags: 0
