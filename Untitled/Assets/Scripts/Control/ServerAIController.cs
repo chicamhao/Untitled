@@ -1,5 +1,6 @@
 ﻿using Apps.Runtime.Combat;
 using Apps.Runtime.Core;
+using Apps.Runtime.Data;
 using Apps.Runtime.Movement;
 using Unity.Netcode;
 using UnityEngine;
@@ -37,7 +38,7 @@ namespace Apps.Runtime.Control
             }
 
             // TODO configurable
-            GetComponent<Status>().Initialize(500);
+            GetComponent<Status>().Initialize(string.Empty, 500);
         }
 
         private void Start()
@@ -54,12 +55,15 @@ namespace Apps.Runtime.Control
             _timeSinceLastSawPlayer += Time.deltaTime;
             _timeAtWayPoint += Time.deltaTime;
 
-            foreach (var receiver in _receivers)
+            if (_receivers != null)
             {
-                if (receiver == null) continue; 
-                if (TryAttack(receiver)) return;
+                foreach (var receiver in _receivers)
+                {
+                    if (receiver == null) continue;
+                    if (TryAttack(receiver)) return;
+                }
+                if (TrySuspect()) return;
             }
-            if (TrySuspect()) return;
             Guard();
         }
 
