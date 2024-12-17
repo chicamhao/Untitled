@@ -1,7 +1,7 @@
 # Profile
 A click-based multiplayer, action role-playing game prototype.
 - Tech stack: Unity 6000.0.29f1,  Netcode for GameObjects.
-* Demo: https://www.youtube.com/watch?v=xwjSWYpZsnY
+* Demo: https://www.youtube.com/watch?v=ikoob8jthlg
    
 # How to confirm
 * For combat mechanics, enter sandbox.scene directly.
