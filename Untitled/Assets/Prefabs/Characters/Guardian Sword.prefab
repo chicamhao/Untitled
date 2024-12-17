@@ -84,7 +84,7 @@ PrefabInstance:
     - target: {fileID: -8039616944935073077, guid: 0f3cd3472ef374994a17057aba29b923,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 4047026940
+      value: 659013927
       objectReference: {fileID: 0}
     - target: {fileID: 3291602765465636772, guid: 0f3cd3472ef374994a17057aba29b923,
         type: 3}
@@ -231,7 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _partrolPath: {fileID: 0}
   _observantRange: 5
-  _suspicionTime: 4
+  _suspicionTime: 1.5
 --- !u!114 &8863874451314181736
 MonoBehaviour:
   m_ObjectHideFlags: 0

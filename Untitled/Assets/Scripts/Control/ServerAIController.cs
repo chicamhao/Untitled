@@ -11,10 +11,11 @@ namespace Apps.Runtime.Control
     {
         [SerializeField] PatrolPath _partrolPath;
         [SerializeField] float _observantRange = 5f;
-        [SerializeField] float _suspicionTime = 4f;
+        [SerializeField] float _suspicionTime = 2f;
 
         ServerFighter _fighter;
         ServerReceiver[] _receivers;
+        ServerReceiver _self;
         ServerMover _mover;
         ServerActionScheduler _actionScheduler;
 
@@ -38,6 +39,7 @@ namespace Apps.Runtime.Control
             _fighter = GetComponent<ServerFighter>();
             _mover = GetComponent<ServerMover>();
             _actionScheduler = GetComponent<ServerActionScheduler>();
+            _self = GetComponent<ServerReceiver>();
 
             _currentWayPoint = transform.position;
         }
@@ -60,11 +62,11 @@ namespace Apps.Runtime.Control
             {
                 foreach (var receiver in _receivers)
                 {
-                    if (receiver == null) continue;
                     if (TryAttack(receiver)) return;
                 }
-                if (TrySuspect()) return;
             }
+            if (TryCounterAttack()) return;
+            if (TrySuspect()) return;
             Guard();
         }
 
@@ -73,13 +75,26 @@ namespace Apps.Runtime.Control
             if (!receiver.IsDead() && InObservantRange(receiver))
             {
                 _timeSinceLastSawPlayer = 0f;
-                if (_actionScheduler.StartAction(_fighter))
-                {
-                    _fighter.Attack(receiver);
-                }
+                Attack(receiver);
                 return true;
             }
             return false;
+        }
+
+        private bool TryCounterAttack()
+        {
+            if (!_self.BeingAttacked) return false;
+
+            Attack(_self.BeingAttackedBy.Self);
+            return true;
+        }
+
+        private void Attack(ServerReceiver receiver)
+        {
+            if (_actionScheduler.StartAction(_fighter))
+            {
+                _fighter.Attack(receiver);
+            }
         }
 
         private bool TrySuspect()
