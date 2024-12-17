@@ -1,5 +1,6 @@
 ﻿using Apps.Runtime.Control;
 using Apps.Runtime.Core;
+using Apps.Runtime.Data;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,6 +14,9 @@ namespace Apps.Runtime.Combat
 
         public CapsuleCollider Collider => _collider;
         CapsuleCollider _collider;
+
+        public ServerFighter BeingAttackedBy { get; set; }
+        public bool BeingAttacked => BeingAttackedBy != null;
 
         private static readonly int s_dieAnimation = Animator.StringToHash("_die");
 

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
-using Apps.Runtime.Combat;
+using Apps.Runtime.Control;
+using Apps.Runtime.Data;
 using Apps.Runtime.Movement;
+using Apps.Runtime.Presentation;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -9,6 +11,7 @@ namespace Apps.Runtime.SceneManager
     public sealed class GameplayState : NetworkBehaviour
     {
         private string _statusText;
+        const uint _playerMaxHP = 1000; // TODO configurable
 
         // key: id, value: HP
         private readonly Dictionary<ulong, uint> _clientStats = new();
@@ -45,17 +48,21 @@ namespace Apps.Runtime.SceneManager
 
             // status initialization
             var status = connected.GetComponent<Status>();
-            status.Initialize(1000); // TODO configurable
-            _clientStats[clientId] = status.Health.Value;
+            status.HP.Value = _playerMaxHP; // TODO configurable
+            _clientStats[clientId] = status.HP.Value;
 
             // listen to hp changed
-            status.Health.OnValueChanged += OnHPChanged;
+            status.HP.OnValueChanged += OnHPChanged;
 
             // place the connected player into appearance line.
             var transform = _linePositions[_clientStats.Count - 1];
             connected.GetComponent<ServerMover>().Teleport(transform.position, transform.rotation);
-
             OnStatusChanged();
+
+            if (SceneTransition.Instance.AllLoadCompleted)
+            {
+                ClientOnAllConnectedRpc();
+            }
         }
 
         private void OnHPChanged(uint _, uint __)
@@ -66,7 +73,7 @@ namespace Apps.Runtime.SceneManager
                 // TODO this's expensive, but OK for a temporary test
                 _clientStats[id] = NetworkManager.Singleton.SpawnManager
                     .GetPlayerNetworkObject(id)
-                    .GetComponent<Status>().Health.Value;
+                    .GetComponent<Status>().HP.Value;
             }
             OnStatusChanged();
         }
@@ -90,10 +97,15 @@ namespace Apps.Runtime.SceneManager
             _statusText = string.Empty;
             foreach (var kvp in _clientStats)
             {
-                _statusText += "PLAYER_" + kvp.Key + "   ";
+                _statusText += CreateUserName(kvp.Key) + "   ";
                 _statusText += "HP:" + kvp.Value;
                 _statusText += "\n";
             }
+        }
+
+        private string CreateUserName(ulong id)
+        {
+            return "PLAYER_" + id;
         }
 
         // TODO menu creation
@@ -109,9 +121,26 @@ namespace Apps.Runtime.SceneManager
         {
             if (IsServer) return;
             _clientStats[clientId] = hp;
-            GenerateStatsText();
+            GenerateStatsText();          
         }
 
+        [Rpc(SendTo.ClientsAndHost)]
+        private void ClientOnAllConnectedRpc()
+        {
+            var players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (var player in players)
+            {
+                player.GetComponent<Status>().Initialize(
+                    CreateUserName(player.GetComponent<NetworkObject>().OwnerClientId), _playerMaxHP); // TODO configurable
+                player.GetComponent<CharacterPresenter>().Initialize(Camera.main);
+            }
+
+            foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+            {
+                enemy.GetComponent<ServerAIController>().Initialize(players);
+            }
+
+        }
 
         // TODO where should this is called?
         public void Dispose()

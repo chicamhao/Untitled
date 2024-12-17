@@ -33,8 +33,8 @@ namespace Apps.Runtime.Combat
         private void Hit(string tag)
         {
             if (_target && !_target.CompareTag(tag)) return;
-            NetworkObject.Despawn(true);
             _hitAction?.Invoke();
+            NetworkObject.Despawn(true);
         }
 
         public void Update()

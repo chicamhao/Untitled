@@ -1,5 +1,6 @@
 ﻿using Apps.Runtime.Combat;
 using Apps.Runtime.Core;
+using Apps.Runtime.Data;
 using Apps.Runtime.Movement;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,10 +11,11 @@ namespace Apps.Runtime.Control
     {
         [SerializeField] PatrolPath _partrolPath;
         [SerializeField] float _observantRange = 5f;
-        [SerializeField] float _suspicionTime = 4f;
+        [SerializeField] float _suspicionTime = 2f;
 
         ServerFighter _fighter;
         ServerReceiver[] _receivers;
+        ServerReceiver _self;
         ServerMover _mover;
         ServerActionScheduler _actionScheduler;
 
@@ -28,16 +30,8 @@ namespace Apps.Runtime.Control
         {
             enabled = IsServer;
 
-            // TODO cache references
-            var players = GameObject.FindGameObjectsWithTag("Player");
-            _receivers = new ServerReceiver[players.Length];
-            for (int i = 0; i < players.Length; i++)
-            {
-                _receivers[i] = players[i].GetComponent<ServerReceiver>();
-            }
-
             // TODO configurable
-            GetComponent<Status>().Initialize(500);
+            GetComponent<Status>().Initialize(string.Empty, 500);
         }
 
         private void Start()
@@ -45,8 +39,18 @@ namespace Apps.Runtime.Control
             _fighter = GetComponent<ServerFighter>();
             _mover = GetComponent<ServerMover>();
             _actionScheduler = GetComponent<ServerActionScheduler>();
+            _self = GetComponent<ServerReceiver>();
 
             _currentWayPoint = transform.position;
+        }
+
+        public void Initialize(GameObject[] players)
+        {
+            _receivers = new ServerReceiver[players.Length];
+            for (int i = 0; i < players.Length; i++)
+            {
+                _receivers[i] = players[i].GetComponent<ServerReceiver>();
+            }
         }
 
         void Update()
@@ -54,11 +58,14 @@ namespace Apps.Runtime.Control
             _timeSinceLastSawPlayer += Time.deltaTime;
             _timeAtWayPoint += Time.deltaTime;
 
-            foreach (var receiver in _receivers)
+            if (_receivers != null)
             {
-                if (receiver == null) continue; 
-                if (TryAttack(receiver)) return;
+                foreach (var receiver in _receivers)
+                {
+                    if (TryAttack(receiver)) return;
+                }
             }
+            if (TryCounterAttack()) return;
             if (TrySuspect()) return;
             Guard();
         }
@@ -68,13 +75,26 @@ namespace Apps.Runtime.Control
             if (!receiver.IsDead() && InObservantRange(receiver))
             {
                 _timeSinceLastSawPlayer = 0f;
-                if (_actionScheduler.StartAction(_fighter))
-                {
-                    _fighter.Attack(receiver);
-                }
+                Attack(receiver);
                 return true;
             }
             return false;
+        }
+
+        private bool TryCounterAttack()
+        {
+            if (!_self.BeingAttacked) return false;
+
+            Attack(_self.BeingAttackedBy.Self);
+            return true;
+        }
+
+        private void Attack(ServerReceiver receiver)
+        {
+            if (_actionScheduler.StartAction(_fighter))
+            {
+                _fighter.Attack(receiver);
+            }
         }
 
         private bool TrySuspect()

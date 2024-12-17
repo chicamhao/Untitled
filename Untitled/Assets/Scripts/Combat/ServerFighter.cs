@@ -13,9 +13,12 @@ namespace Apps.Runtime.Combat
         Animator _animator;
 
         ServerMover _mover;
+
+        public ServerReceiver Self => _self;
+        ServerReceiver _self;
+
         ServerReceiver _receiver;
 
-        IObjectPool<Projectile> _projectilePool;
         readonly static int s_attackAnimation = Animator.StringToHash("_attack");
         readonly static int s_stopAttackAnimation = Animator.StringToHash("_stopAttack");
 
@@ -30,6 +33,7 @@ namespace Apps.Runtime.Combat
         {
             _animator = GetComponent<Animator>();
             _mover = GetComponent<ServerMover>();
+            _self = GetComponent<ServerReceiver>();
         }
 
         public void Update()
@@ -73,7 +77,7 @@ namespace Apps.Runtime.Combat
 
         /// <summary>
         /// move to the target and attack
-        /// /// </summary>
+        /// </summary>
         /// <param name="receiver"></param>
         public void Attack(ServerReceiver receiver)
         {
@@ -86,7 +90,12 @@ namespace Apps.Runtime.Combat
         {
             _animator.ResetTrigger(s_attackAnimation);
             _animator.SetTrigger(s_stopAttackAnimation);
-            _receiver = null;
+
+            if (_receiver)
+            {
+                _receiver.BeingAttackedBy = null;
+                _receiver = null;
+            }
         }
 
         public void ChangeWeapon(Weapon weapon, Transform handTransform)
@@ -100,6 +109,7 @@ namespace Apps.Runtime.Combat
         {
             if (!IsAttacking()) return;
 
+            _receiver.BeingAttackedBy = this;
             _receiver.Receive(_weapon.Damage);
             if (_receiver.IsDead())
             {
