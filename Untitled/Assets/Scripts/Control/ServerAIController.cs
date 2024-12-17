@@ -29,14 +29,6 @@ namespace Apps.Runtime.Control
         {
             enabled = IsServer;
 
-            // TODO cache references
-            var players = GameObject.FindGameObjectsWithTag("Player");
-            _receivers = new ServerReceiver[players.Length];
-            for (int i = 0; i < players.Length; i++)
-            {
-                _receivers[i] = players[i].GetComponent<ServerReceiver>();
-            }
-
             // TODO configurable
             GetComponent<Status>().Initialize(string.Empty, 500);
         }
@@ -48,6 +40,15 @@ namespace Apps.Runtime.Control
             _actionScheduler = GetComponent<ServerActionScheduler>();
 
             _currentWayPoint = transform.position;
+        }
+
+        public void Initialize(GameObject[] players)
+        {
+            _receivers = new ServerReceiver[players.Length];
+            for (int i = 0; i < players.Length; i++)
+            {
+                _receivers[i] = players[i].GetComponent<ServerReceiver>();
+            }
         }
 
         void Update()

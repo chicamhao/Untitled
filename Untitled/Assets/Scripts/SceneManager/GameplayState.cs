@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Apps.Runtime.Control;
 using Apps.Runtime.Data;
 using Apps.Runtime.Movement;
 using Apps.Runtime.Presentation;
@@ -10,6 +11,7 @@ namespace Apps.Runtime.SceneManager
     public sealed class GameplayState : NetworkBehaviour
     {
         private string _statusText;
+        const uint _playerMaxHP = 1000; // TODO configurable
 
         // key: id, value: HP
         private readonly Dictionary<ulong, uint> _clientStats = new();
@@ -46,7 +48,7 @@ namespace Apps.Runtime.SceneManager
 
             // status initialization
             var status = connected.GetComponent<Status>();
-            status.Initialize(CreateUserName(clientId), 1000); // TODO configurable
+            status.HP.Value = _playerMaxHP; // TODO configurable
             _clientStats[clientId] = status.HP.Value;
 
             // listen to hp changed
@@ -55,9 +57,12 @@ namespace Apps.Runtime.SceneManager
             // place the connected player into appearance line.
             var transform = _linePositions[_clientStats.Count - 1];
             connected.GetComponent<ServerMover>().Teleport(transform.position, transform.rotation);
-            connected.GetComponent<CharacterPresenter>().Initialize(Camera.main);
-            //ClientOnInitializedRpc(clientId);
             OnStatusChanged();
+
+            if (SceneTransition.Instance.AllLoadCompleted)
+            {
+                ClientOnAllConnectedRpc();
+            }
         }
 
         private void OnHPChanged(uint _, uint __)
@@ -116,7 +121,25 @@ namespace Apps.Runtime.SceneManager
         {
             if (IsServer) return;
             _clientStats[clientId] = hp;
-            GenerateStatsText();
+            GenerateStatsText();          
+        }
+
+        [Rpc(SendTo.ClientsAndHost)]
+        private void ClientOnAllConnectedRpc()
+        {
+            var players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (var player in players)
+            {
+                player.GetComponent<Status>().Initialize(
+                    CreateUserName(player.GetComponent<NetworkObject>().OwnerClientId), _playerMaxHP); // TODO configurable
+                player.GetComponent<CharacterPresenter>().Initialize(Camera.main);
+            }
+
+            foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+            {
+                enemy.GetComponent<ServerAIController>().Initialize(players);
+            }
+
         }
 
         // TODO where should this is called?

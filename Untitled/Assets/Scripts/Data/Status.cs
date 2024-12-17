@@ -17,7 +17,12 @@ namespace Apps.Runtime.Data
         public void Initialize(string userName, uint maxHp)
         {
             _userName = userName;
-            _maxHp = HP.Value = maxHp;
+            _maxHp = maxHp;
+
+            if (IsServer)
+            {
+                HP.Value = maxHp;
+            }
         }
 
         public void Subtract(uint hp)

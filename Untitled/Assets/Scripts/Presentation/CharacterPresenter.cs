@@ -16,17 +16,18 @@ namespace Apps.Runtime.Presentation
 
             if (!NetworkObject.IsPlayerObject)
             {
-                OnClientChanged(_status.HP.Value, _status.HP.Value);
-                _status.HP.OnValueChanged += OnClientChanged;
-                _UI.Canvas.worldCamera = Camera.main;
+                Initialize(Camera.main);
             }
         }
 
         public void Initialize(Camera camera)
         {
-            OnClientChanged(_status.HP.Value, _status.HP.Value);
-            _status.HP.OnValueChanged += OnClientChanged;
-            _UI.Canvas.worldCamera = camera;
+            if (IsClient)
+            {
+                OnClientChanged(_status.HP.Value, _status.HP.Value);
+                _status.HP.OnValueChanged += OnClientChanged;
+                _UI.Canvas.worldCamera = camera;
+            }
         }
 
         public override void OnNetworkDespawn()
@@ -36,9 +37,13 @@ namespace Apps.Runtime.Presentation
             {
                 _status.HP.OnValueChanged -= OnClientChanged;
             }
+            if (_UI.Canvas)
+            {
+                _UI.Canvas.worldCamera = null;
+            }
         }
 
-        private void OnClientChanged(uint previousHealth, uint newHealth)
+        public void OnClientChanged(uint previousHealth, uint newHealth)
         {
             _UI.gameObject.SetActive(!_status.IsDead);
 
@@ -53,7 +58,7 @@ namespace Apps.Runtime.Presentation
 
                 if (!string.IsNullOrEmpty(_status.UserName))
                 {
-                    _UI.UserNameText.SetText(_status.UserName);
+                    _UI.UserNameText.SetText(_status.UserName.ToString());
                 }
             }
         }

@@ -12,11 +12,6 @@ namespace Apps.Runtime.Control
         [SerializeField] ServerPlayerController _serverPlayerController;
         bool _interactRequest;
 
-        private void Start()
-        {
-            DontDestroyOnLoad(this);
-        }
-
         void Update()
         {
             if (IsLocalPlayer && Input.GetMouseButton(0))

@@ -1,3 +1,4 @@
+using Apps.Runtime.Control;
 using Apps.Runtime.Data;
 using Apps.Runtime.Movement;
 using Apps.Runtime.Presentation;
@@ -14,13 +15,18 @@ namespace Apps.Sandbox
             {
                 var player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
 
-                player.GetComponent<Status>().Initialize("PLAYER " + player.OwnerClientId.ToString(), 1000);
+                const uint maxHp = 1000;
+                var status = player.GetComponent<Status>();
+                status.Initialize("PLAYER " + player.OwnerClientId.ToString(), maxHp);
+                status.HP.Value = maxHp;
+
                 player.GetComponent<ServerMover>().Teleport(transform.position, transform.rotation);
                 player.GetComponent<CharacterPresenter>().Initialize(Camera.main);
-            }
-            else
-            {
-                NetworkManager.Singleton.StartClient();
+
+                foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+                {
+                    enemy.GetComponent<ServerAIController>().Initialize(new[] { player.gameObject });
+                }
             }
         }
     }
