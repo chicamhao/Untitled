@@ -231,7 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _partrolPath: {fileID: 0}
   _observantRange: 5
-  _suspicionTime: 1.5
+  _suspicionTime: 3
 --- !u!114 &8863874451314181736
 MonoBehaviour:
   m_ObjectHideFlags: 0

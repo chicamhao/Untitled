@@ -11,7 +11,7 @@ namespace Apps.Runtime.Control
     {
         [SerializeField] PatrolPath _partrolPath;
         [SerializeField] float _observantRange = 5f;
-        [SerializeField] float _suspicionTime = 2f;
+        [SerializeField] float _suspicionTime = 3f;
 
         ServerFighter _fighter;
         ServerReceiver[] _receivers;
@@ -31,7 +31,7 @@ namespace Apps.Runtime.Control
             enabled = IsServer;
 
             // TODO configurable
-            GetComponent<Status>().Initialize(string.Empty, 500);
+            GetComponent<Status>().Initialize(string.Empty, 300);
         }
 
         private void Start()
