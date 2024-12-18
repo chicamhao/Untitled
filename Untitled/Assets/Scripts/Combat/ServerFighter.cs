@@ -122,16 +122,11 @@ namespace Apps.Runtime.Combat
             if (!IsAttacking()) return;
 
             var p = NetworkObjectPool.Singleton.GetNetworkObject(_weapon.ProjectilePrefab, _handTransform.position, _handTransform.rotation);
-            p.GetComponent<Projectile>().Initialize(_receiver.Collider, ProjectileHitCallback);
+            p.GetComponent<Projectile>().Initialize(_receiver.Collider, Hit);
             if (!p.IsSpawned)
             {
                 p.Spawn(true);
             }
-        }
-
-        private void ProjectileHitCallback()
-        {
-            Hit();
         }
         #endregion
     }
