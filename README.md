@@ -18,22 +18,12 @@ A click-based multiplayer, action role-playing game prototype.
 ![Screenshot 2024-12-17 at 21 24 59](https://github.com/user-attachments/assets/19b751a4-4f44-4f59-a830-ba5de939b9df)
 
 
-# Progress
-* Available:
+# Features
   - Local lobby.
   - Combat mechanic with real-time multiplayer synchronization.
-  - Weapon changes.
-  - AI: Guardian, Archer.
-    
-* Planed:
-  - Visual improvement 18.12. <-
-     - water flows, skybox, a nice custom pipeline.
-     - some cool combat effects.
-  - Audio intergration 20.12.
-  - Match-making, voice, chat intergration 30.12.
-  - Level design, scene manager improvement.
-  - Save/load, asset manager creation.
-  - Refactor, optimization, TODO & bugs resolution. <-
+  - Weapon: unarmed, bow, sword.
+  - Enemy: Guardian, Archer.
+
  # License
  - The source code is free to use, but the polygon art (by Synty) are for educational purposes only. Please read the readme included with assets folder (if any).
  - Game design referenced from Gamedev's Udemy courses of Ben Tristem & Rick Davidson.
